@@ -5,10 +5,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 find_package(SFML REQUIRED COMPONENTS graphics window system) 
 
 include_directories(${SFML_INCLUDE_DIR}) 
-add_executable(wave_visualization src/main.cpp)
-
-target_link_libraries(wave_visualization ${SFML_LIBRARIES} ${SFML_DEPENDENCIES}) 
-target_link_libraries(wave_visualization sfml-graphics)
 
 add_executable(3D src/3D.cpp src/FDTD.cpp) 
 target_link_libraries(3D ${SFML_LIBRARIES} ${SFML_DEPENDENCIES}) 

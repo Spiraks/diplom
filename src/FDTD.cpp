@@ -33,7 +33,12 @@ void Field::updateE(Field &H, Field &J, Field &c1, Field &c2)
         {
             for (float x = 1; x < len_x - 2; x++)
             {
-                this->setNode(x + 1, y, z, X, c1.getNode(x + 1, y, z, X) * this->getNode(x + 1, y, z, X) + c2.getNode(x + 1, y, z, X) * ((H.getNode(x + 1, y + 1, z, Z) - H.getNode(x + 1, y - 1, z, Z)) / dy - (H.getNode(x + 1, y, z + 1, Y) - H.getNode(x + 1, y, z - 1, Y)) / dz) - J.getNode(x + 1, y, z, X));
+                this->setNode(x + 1, y, z, X,
+                              c1.getNode(x + 1, y, z, X) * this->getNode(x + 1, y, z, X) +
+                                  c2.getNode(x + 1, y, z, X) *
+                                      ((H.getNode(x + 1, y + 1, z, Z) - H.getNode(x + 1, y - 1, z, Z)) / dy -
+                                       (H.getNode(x + 1, y, z + 1, Y) - H.getNode(x + 1, y, z - 1, Y)) / dz) -
+                                  J.getNode(x + 1, y, z, X));
 
                 this->setNode(x, y + 1, z, Y, c1.getNode(x, y + 1, z, Y) * this->getNode(x, y + 1, z, Y) + c2.getNode(x, y + 1, z, Y) * ((H.getNode(x, y + 1, z + 1, X) - H.getNode(x, y + 1, z - 1, X)) / dz - (H.getNode(x + 1, y + 1, z, Z) - H.getNode(x - 1, y + 1, z, Z)) / dx) - J.getNode(x, y + 1, z, Y));
 
@@ -75,18 +80,19 @@ void Field::saveExToFileZ(const std::string &filename, int comp)
     {
         for (int x = 1; x < len_x - 1; x++)
         {
-            // std::cout << x << "-" <<  y << std::endl;
-
             float val = getNode(x, y, z, comp);
-            // if(!std::isfinite(val)){
-            //     file << 0 << " ";
-            //     continue;
-            // }
-            // if (val == 0)
-            // {
-            //     val = getNode(x - 1, y, z, comp) + getNode(x, y - 1, z, comp) + getNode(x + 1, y, z, comp) + getNode(x, y + 1, z, comp);
-            //     val = val / 4;
-            // }
+            if (val == 0)
+            {
+                val = getNode(x - 1, y, z, comp) +
+                      getNode(x, y - 1, z, comp) +
+                      getNode(x + 1, y, z, comp) +
+                      getNode(x, y + 1, z, comp) +
+                      getNode(x + 1, y + 1, z, comp) +
+                      getNode(x + 1, y - 1, z, comp) +
+                      getNode(x - 1, y + 1, z, comp) +
+                      getNode(x - 1, y - 1, z, comp);
+                val = val / 8;
+            }
             file << val << " ";
         }
         file << std::endl;

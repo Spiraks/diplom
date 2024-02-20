@@ -1,60 +1,85 @@
-#include <SFML/Graphics.hpp>
-#include <vector>
+// #include <SFML/Graphics.hpp>
 
-void drawWaves(sf::RenderWindow& window, const std::vector<std::vector<std::vector<float>>>& amplitudes) {
-    // Размер окна
-    const int width = window.getSize().x;
-    const int height = window.getSize().y;
+// #include <iostream>
+// #include <fstream>
+// #include <unistd.h>
+// #include <chrono>
+// #include "FDTD.h"
 
-    // Создаем изображение
-    sf::Image image;
-    image.create(width, height, sf::Color::White);
+// int main()
+// {
 
-    // Проходим по каждой точке изображения и устанавливаем цвет в зависимости от амплитуды
-    for (int x = 0; x < width; ++x) {
-        for (int y = 0; y < height; ++y) {
-            float amplitude = amplitudes[x][y][0]; // Здесь используется только одна компонента амплитуды, так как это 3D волна
-            // Установка цвета в зависимости от амплитуды
-            sf::Color color(static_cast<sf::Uint8>(amplitude * 255), 50, 50);
-            image.setPixel(x, y, color);
-        }
-    }
+//     int _x = 200;
+//     int _y = 200;
+//     int _z = 30;
+//     int px = _x / 2;
+//     int py = _y / 2;
+//     int pz = _z / 2;
 
-    // Создаем текстуру изображения
-    sf::Texture texture;
-    texture.loadFromImage(image);
+//     sf::RenderWindow window(sf::VideoMode(_x, _y), "3D Wave Simulation");
+//     Mesh3D mesh{_x, _y, _z};
+//     FDTD grid(mesh);
+//     Field E;
+//     E = Field(mesh);
+//     float j = 1;
+//     for (int z = 0; z < _z; z++)
+//     {
+//         grid.J.setNode(px, py, z, X, j);
+//         grid.J.setNode(px, py, z, Y, j);
+//         grid.J.setNode(px, py, z, Z, j);
+//     }
 
-    // Создаем спрайт с текстурой
-    sf::Sprite sprite(texture);
+//     while (window.isOpen())
+//     {
+//         sf::Event event;
+//         while (window.pollEvent(event))
+//         {
+//             if (event.type == sf::Event::Closed)
+//             {
+//                 window.close();
+//             }
+//         }
+//         grid.update(dt * 50);
 
-    // Отрисовываем спрайт
-    window.draw(sprite);
-}
+//         // Draw the wave
+//         sf::Texture texture;
+//         texture.create(_x, _y);
+//         sf::Uint8 *pixels = new sf::Uint8[_x * _y * 4];
+//         for (int x = 1; x < _x; ++x)
+//         {
+//             for (int y = 1; y < _y; y++)
+//             {
+//                 int index = (x * _y + y) * 4;
 
-int main() {
-    // Создаем окно SFML
-    sf::RenderWindow window(sf::VideoMode(800, 600), "3D Waves");
+//                 float vx = abs(grid.H.getNodeE(x, y, X));
+//                 float vy = abs(grid.H.getNodeE(x, y, Y));
+//                 if (vx < 10 && vx > 0)
+//                 {
+//                     pixels[index] = (2 + vx) * 20;
+//                     pixels[index + 1] = 0;
+//                     pixels[index + 2] = (2 + vy) * 20;
+//                     pixels[index + 3] = 255;
+//                     continue;
+//                 }
+//                 // float v = (vx+vy)/2;
+//                 pixels[index] = static_cast<sf::Uint8>(vx);
+//                 pixels[index + 1] = 0;
+//                 pixels[index + 2] = static_cast<sf::Uint8>(vy);
+//                 pixels[index + 3] = 255;
+//             }
+//         }
 
-    // Пример трехмерного вектора амплитуд
-    std::vector<std::vector<std::vector<float>>> amplitudes(800, std::vector<std::vector<float>>(600, std::vector<float>(1, 0.0f)));
+//         texture.update(pixels);
 
-    // Главный цикл программы
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
+//         grid.H.saveExToFileZ("/home/alex/src/diplom_FDTD/Ex.txt", X);
+//         grid.H.saveExToFileZ("/home/alex/src/diplom_FDTD/Ey.txt", Y);
+//         return 0;
+//         delete[] pixels;
+//         sf::Sprite sprite(texture);
+//         window.clear();
+//         window.draw(sprite);
+//         window.display();
+//     }
 
-        // Очистка экрана
-        window.clear();
-
-        // Отрисовка волн
-        drawWaves(window, amplitudes);
-
-        // Отображение отрисованного на экране
-        window.display();
-    }
-
-    return 0;
-}
+//     return 0;
+// }
