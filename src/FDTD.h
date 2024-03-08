@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <math.h>
 #include <vector>
+#include "Obj.h"
 
 #define X 0
 #define Y 1
@@ -19,6 +20,11 @@ const float dy = dstep; // Пространственный шаг по y (м)
 const float dz = dstep; // Пространственный шаг по z (м)
 const float sigma = 0;  // Коэффициент проводимости для потерь
 
+// Для граничных условий мура
+const float Mur_Tx = c * dt / dx;
+const float Mur_Ty = c * dt / dy;
+const float Mur_Tz = c * dt / dz;
+
 struct Mesh3D
 {
     int len_x, len_y, len_z;
@@ -27,12 +33,18 @@ struct Mesh3D
 class Field
 {
 public:
-    Field(){}
-    Field(Mesh3D &mesh, float value = 0)
+    Field() {}
+    Field(Mesh3D &mesh, Obj &obj, float value = 0)
     {
         len_x = mesh.len_x;
         len_y = mesh.len_y;
         len_z = mesh.len_z;
+        obj_x = obj.get_obj_x();
+        obj_y = obj.get_obj_y();
+        obj_z = obj.get_obj_z();
+        _obj_len_x = obj.get__obj_len_x();
+        _obj_len_y = obj.get__obj_len_y();
+        _obj_len_z = obj.get__obj_len_z();
         this->_value = value;
         nodes = std::vector<std::vector<std::vector<std::vector<float>>>>(len_x,
                                                                           std::vector<std::vector<std::vector<float>>>(len_y,
@@ -41,14 +53,9 @@ public:
     }
 
     float getNode(float x, float y, float z, int comp);
-
-    float getNodeE(float x, float y, int comp);
-
     void setNode(float x, float y, float z, int comp, float value);
 
-    void updateE(Field &H, Field &J, Field &c1 , Field &c2);
-    void updateE();
-
+    void updateE(Field &H, Field &J, Field &c1, Field &c2);
     void updateH(Field &E, Field &c);
 
     void saveExToFileZ(const std::string &filename, int comp);
@@ -104,6 +111,12 @@ private:
     int len_x = 0;
     int len_y = 0;
     int len_z = 0;
+    int obj_x = 0;
+    int obj_y = 0;
+    int obj_z = 0;
+    int _obj_len_x = 0;
+    int _obj_len_y = 0;
+    int _obj_len_z = 0;
     float _value = 0;
     float min_x = 0;
     float min_y = 0;
@@ -127,6 +140,10 @@ private:
     int len_z = 0;
 
 public:
+    int obj_x = 75;
+    int obj_y = 75;
+    int _obj_len_x = 50;
+    int _obj_len_y = 50;
     Field E;
     Field H;
     Field Sigm; // 2 -14
@@ -134,17 +151,17 @@ public:
     Field Eps; // 1.00057
     Field Mu;  // 0.999991
 
-    FDTD(Mesh3D &mesh)
+    FDTD(Mesh3D &mesh, Obj &obj)
     {
-        E = Field(mesh);
-        H = Field(mesh);
-        J = Field(mesh);
-        Sigm = Field(mesh, 2.0e-14); // 2 -14
-        Eps = Field(mesh, 1.00057);  // 1.00057
-        Mu = Field(mesh, 0.999991);  // 0.999991
-        c = Field(mesh);
-        c1 = Field(mesh);
-        c2 = Field(mesh);
+        E = Field(mesh, obj);
+        H = Field(mesh, obj);
+        J = Field(mesh, obj);
+        Sigm = Field(mesh, obj, 2.0e-14); // 2 -14
+        Eps = Field(mesh, obj, 1.00057);  // 1.00057
+        Mu = Field(mesh, obj, 0.999991);  // 0.999991
+        c = Field(mesh, obj);
+        c1 = Field(mesh, obj);
+        c2 = Field(mesh, obj);
         len_x = mesh.len_x;
         len_y = mesh.len_y;
         len_z = mesh.len_z;
@@ -153,10 +170,6 @@ public:
     void update(float time);
     void initCoeffi();
 };
-
-
-
-
 
 // void drawWaves(sf::RenderWindow &window, Field &amplitudes)
 // {

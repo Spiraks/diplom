@@ -2,7 +2,6 @@
 #include "FDTD.h"
 #include <cmath>
 
-
 float Field::getNode(float x, float y, float z, int comp)
 {
     return nodes[(int)(x)][(int)(y)][(int)(z)][comp];
@@ -11,16 +10,6 @@ float Field::getNode(float x, float y, float z, int comp)
 void Field::setNode(float x, float y, float z, int comp, float value)
 {
     nodes[(int)(x)][(int)(y)][(int)(z)][comp] = value;
-}
-
-float Field::getNodeE(float x, float y, int comp)
-{
-    return nodesE[(int)(x)][(int)(y)][comp];
-}
-
-void Field::updateE()
-{
-    nodesE = nodes[len_x / 2];
 }
 
 void Field::updateE(Field &H, Field &J, Field &c1, Field &c2)
@@ -33,6 +22,10 @@ void Field::updateE(Field &H, Field &J, Field &c1, Field &c2)
         {
             for (float x = 1; x < len_x - 2; x++)
             {
+                // Не считаем обьект
+                if (x > obj_x && x < obj_x + _obj_len_x)
+                    if (y > obj_y && y < obj_y + _obj_len_y)
+                        continue;
                 this->setNode(x + 1, y, z, X,
                               c1.getNode(x + 1, y, z, X) * this->getNode(x + 1, y, z, X) +
                                   c2.getNode(x + 1, y, z, X) *
@@ -56,6 +49,12 @@ void Field::updateH(Field &E, Field &c)
         {
             for (float x = 1; x < len_x - 2; x++)
             {
+
+                // Не считаем обьект
+                if (x > obj_x && x < obj_x + _obj_len_x)
+                    if (y > obj_y && y < obj_y + _obj_len_y)
+                        continue;
+
                 this->setNode(x, y + 1, z + 1, X, this->getNode(x, y + 1, z + 1, X) + c.getNode(x, y + 1, z + 1, X) * ((E.getNode(x, y + 1, z + 2, Y) - E.getNode(x, y + 1, z, Y)) / dz - (E.getNode(x, y + 2, z + 1, Z) - E.getNode(x, y, z + 1, Z)) / dy));
 
                 this->setNode(x + 1, y, z + 1, Y, this->getNode(x + 1, y, z + 1, Y) + c.getNode(x + 1, y, z + 1, Y) * ((E.getNode(x + 2, y, z + 1, Z) - E.getNode(x, y, z + 1, Z)) / dx - (E.getNode(x + 1, y, z + 2, X) - E.getNode(x + 1, y, z, X)) / dz));
@@ -193,6 +192,8 @@ void FDTD::update(float time)
     {
         H.updateH(E, c);
         E.updateE(H, J, c1, c2);
+        // (x1 - x2) ^ 2 + (y1 - y2) ^ 2;
+
         _time += dt;
         std::cout << "time " << _time << "\n";
     }
