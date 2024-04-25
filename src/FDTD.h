@@ -8,6 +8,12 @@
 #define X 0
 #define Y 1
 #define Z 2
+#define MUR
+
+#define VECTOR std::vector<float>
+#define VECTOR_2D std::vector<std::vector<float>>
+#define VECTOR_3D std::vector<std::vector<std::vector<float>>>
+#define VECTOR_4D std::vector<std::vector<std::vector<std::vector<float>>>>
 
 // Константы и параметры для моделирования
 const float c = 2.997925010e8;       // Скорость света (м/с)
@@ -46,14 +52,18 @@ public:
         _obj_len_y = obj.get__obj_len_y();
         _obj_len_z = obj.get__obj_len_z();
         this->_value = value;
-        nodes = std::vector<std::vector<std::vector<std::vector<float>>>>(len_x,
-                                                                          std::vector<std::vector<std::vector<float>>>(len_y,
-                                                                                                                       std::vector<std::vector<float>>(len_z, std::vector<float>(3, _value))));
-        nodesE = std::vector<std::vector<std::vector<float>>>(len_x, std::vector<std::vector<float>>(len_y, std::vector<float>(3, _value)));
+        nodes = VECTOR_4D(len_x,
+                          VECTOR_3D(len_y,
+                                    VECTOR_2D(len_z, VECTOR(3, _value))));
+        nodes_old = VECTOR_4D(len_x,
+                              VECTOR_3D(len_y,
+                                        VECTOR_2D(len_z, VECTOR(3, _value))));
+        nodesE = VECTOR_3D(len_x, VECTOR_2D(len_y, VECTOR(3, _value)));
     }
 
     float getNode(float x, float y, float z, int comp);
     void setNode(float x, float y, float z, int comp, float value);
+    float getNodeOld(float x, float y, float z, int comp);
 
     void updateE(Field &H, Field &J, Field &c1, Field &c2);
     void updateH(Field &E, Field &c);
@@ -64,6 +74,8 @@ public:
 
     void saveGraphZ(const std::string &filename, int comp);
     void saveRangeY();
+
+    void copyNodes();
 
     size_t getSizeX()
     {
@@ -124,8 +136,9 @@ private:
     float max_x = 0;
     float max_y = 0;
     float max_z = 0;
-    std::vector<std::vector<std::vector<std::vector<float>>>> nodes;
-    std::vector<std::vector<std::vector<float>>> nodesE;
+    VECTOR_4D nodes;
+    VECTOR_4D nodes_old;
+    VECTOR_3D nodesE;
 };
 
 class FDTD
@@ -169,6 +182,8 @@ public:
     }
     void update(float time);
     void initCoeffi();
+    void MursFirstABC();
+    void GetBorderValues();
 };
 
 // void drawWaves(sf::RenderWindow &window, Field &amplitudes)

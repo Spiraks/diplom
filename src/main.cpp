@@ -19,8 +19,8 @@
 //     sf::RenderWindow window(sf::VideoMode(_x, _y), "3D Wave Simulation");
 //     Mesh3D mesh{_x, _y, _z};
 //     FDTD grid(mesh);
-//     Field E;
-//     E = Field(mesh);
+//     My_Field E;
+//     E = My_Field(mesh);
 //     float j = 1;
 //     for (int z = 0; z < _z; z++)
 //     {

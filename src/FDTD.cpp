@@ -6,6 +6,14 @@ float Field::getNode(float x, float y, float z, int comp)
 {
     return nodes[(int)(x)][(int)(y)][(int)(z)][comp];
 }
+float Field::getNodeOld(float x, float y, float z, int comp)
+{
+    return nodes_old[(int)(x)][(int)(y)][(int)(z)][comp];
+}
+void Field::copyNodes()
+{
+    nodes_old = nodes;
+};
 
 void Field::setNode(float x, float y, float z, int comp, float value)
 {
@@ -16,16 +24,16 @@ void Field::updateE(Field &H, Field &J, Field &c1, Field &c2)
 {
 
     float k = (dt / epsilon0);
-    for (float z = 1; z < len_z - 2; z++)
+    for (float z = 2; z < len_z - 2; z++)
     {
-        for (float y = 1; y < len_y - 2; y++)
+        for (float y = 2; y < len_y - 2; y++)
         {
-            for (float x = 1; x < len_x - 2; x++)
+            for (float x = 2; x < len_x - 2; x++)
             {
                 // Не считаем обьект
-                if (x > obj_x && x < obj_x + _obj_len_x)
-                    if (y > obj_y && y < obj_y + _obj_len_y)
-                        continue;
+                // if (x > obj_x && x < obj_x + _obj_len_x)
+                //     if (y > obj_y && y < obj_y + _obj_len_y)
+                //         continue;
                 this->setNode(x + 1, y, z, X,
                               c1.getNode(x + 1, y, z, X) * this->getNode(x + 1, y, z, X) +
                                   c2.getNode(x + 1, y, z, X) *
@@ -51,9 +59,9 @@ void Field::updateH(Field &E, Field &c)
             {
 
                 // Не считаем обьект
-                if (x > obj_x && x < obj_x + _obj_len_x)
-                    if (y > obj_y && y < obj_y + _obj_len_y)
-                        continue;
+                // if (x > obj_x && x < obj_x + _obj_len_x)
+                //     if (y > obj_y && y < obj_y + _obj_len_y)
+                //         continue;
 
                 this->setNode(x, y + 1, z + 1, X, this->getNode(x, y + 1, z + 1, X) + c.getNode(x, y + 1, z + 1, X) * ((E.getNode(x, y + 1, z + 2, Y) - E.getNode(x, y + 1, z, Y)) / dz - (E.getNode(x, y + 2, z + 1, Z) - E.getNode(x, y, z + 1, Z)) / dy));
 
@@ -188,10 +196,20 @@ void Field::saveExToFileY(const std::string &filename, int comp)
 
 void FDTD::update(float time)
 {
+    time += _time;
     while (time > _time)
     {
+
         H.updateH(E, c);
         E.updateE(H, J, c1, c2);
+#ifdef MUR
+        std::cout << "MUR\n";
+        if (_time >= dt)
+        {
+            MursFirstABC();
+        }
+        GetBorderValues();
+#endif
         // (x1 - x2) ^ 2 + (y1 - y2) ^ 2;
 
         _time += dt;
