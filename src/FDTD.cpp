@@ -2,11 +2,11 @@
 #include "FDTD.h"
 #include <cmath>
 
-float Field::getNode(float x, float y, float z, int comp)
+float Field::gt(float x, float y, float z, int comp)
 {
     return nodes[(int)(x)][(int)(y)][(int)(z)][comp];
 }
-float Field::getNodeOld(float x, float y, float z, int comp)
+float Field::gtO(float x, float y, float z, int comp)
 {
     return nodes_old[(int)(x)][(int)(y)][(int)(z)][comp];
 }
@@ -35,15 +35,15 @@ void Field::updateE(Field &H, Field &J, Field &c1, Field &c2)
                 //     if (y > obj_y && y < obj_y + _obj_len_y)
                 //         continue;
                 this->setNode(x + 1, y, z, X,
-                              c1.getNode(x + 1, y, z, X) * this->getNode(x + 1, y, z, X) +
-                                  c2.getNode(x + 1, y, z, X) *
-                                      ((H.getNode(x + 1, y + 1, z, Z) - H.getNode(x + 1, y - 1, z, Z)) / dy -
-                                       (H.getNode(x + 1, y, z + 1, Y) - H.getNode(x + 1, y, z - 1, Y)) / dz) -
-                                  J.getNode(x + 1, y, z, X));
+                              c1.gt(x + 1, y, z, X) * this->gt(x + 1, y, z, X) +
+                                  c2.gt(x + 1, y, z, X) *
+                                      ((H.gt(x + 1, y + 1, z, Z) - H.gt(x + 1, y - 1, z, Z)) / dy -
+                                       (H.gt(x + 1, y, z + 1, Y) - H.gt(x + 1, y, z - 1, Y)) / dz) -
+                                  J.gt(x + 1, y, z, X));
 
-                this->setNode(x, y + 1, z, Y, c1.getNode(x, y + 1, z, Y) * this->getNode(x, y + 1, z, Y) + c2.getNode(x, y + 1, z, Y) * ((H.getNode(x, y + 1, z + 1, X) - H.getNode(x, y + 1, z - 1, X)) / dz - (H.getNode(x + 1, y + 1, z, Z) - H.getNode(x - 1, y + 1, z, Z)) / dx) - J.getNode(x, y + 1, z, Y));
+                this->setNode(x, y + 1, z, Y, c1.gt(x, y + 1, z, Y) * this->gt(x, y + 1, z, Y) + c2.gt(x, y + 1, z, Y) * ((H.gt(x, y + 1, z + 1, X) - H.gt(x, y + 1, z - 1, X)) / dz - (H.gt(x + 1, y + 1, z, Z) - H.gt(x - 1, y + 1, z, Z)) / dx) - J.gt(x, y + 1, z, Y));
 
-                this->setNode(x, y, z + 1, Z, c1.getNode(x, y, z + 1, Z) * this->getNode(x, y, z + 1, Z) + c2.getNode(x, y, z + 1, Z) * ((H.getNode(x + 1, y, z + 1, Y) - H.getNode(x - 1, y, z + 1, Y)) / dx - (H.getNode(x, y + 1, z + 1, X) - H.getNode(x, y - 1, z + 1, X)) / dy) - J.getNode(x, y, z + 1, Z));
+                this->setNode(x, y, z + 1, Z, c1.gt(x, y, z + 1, Z) * this->gt(x, y, z + 1, Z) + c2.gt(x, y, z + 1, Z) * ((H.gt(x + 1, y, z + 1, Y) - H.gt(x - 1, y, z + 1, Y)) / dx - (H.gt(x, y + 1, z + 1, X) - H.gt(x, y - 1, z + 1, X)) / dy) - J.gt(x, y, z + 1, Z));
             }
         }
     }
@@ -63,11 +63,11 @@ void Field::updateH(Field &E, Field &c)
                 //     if (y > obj_y && y < obj_y + _obj_len_y)
                 //         continue;
 
-                this->setNode(x, y + 1, z + 1, X, this->getNode(x, y + 1, z + 1, X) + c.getNode(x, y + 1, z + 1, X) * ((E.getNode(x, y + 1, z + 2, Y) - E.getNode(x, y + 1, z, Y)) / dz - (E.getNode(x, y + 2, z + 1, Z) - E.getNode(x, y, z + 1, Z)) / dy));
+                this->setNode(x, y + 1, z + 1, X, this->gt(x, y + 1, z + 1, X) + c.gt(x, y + 1, z + 1, X) * ((E.gt(x, y + 1, z + 2, Y) - E.gt(x, y + 1, z, Y)) / dz - (E.gt(x, y + 2, z + 1, Z) - E.gt(x, y, z + 1, Z)) / dy));
 
-                this->setNode(x + 1, y, z + 1, Y, this->getNode(x + 1, y, z + 1, Y) + c.getNode(x + 1, y, z + 1, Y) * ((E.getNode(x + 2, y, z + 1, Z) - E.getNode(x, y, z + 1, Z)) / dx - (E.getNode(x + 1, y, z + 2, X) - E.getNode(x + 1, y, z, X)) / dz));
+                this->setNode(x + 1, y, z + 1, Y, this->gt(x + 1, y, z + 1, Y) + c.gt(x + 1, y, z + 1, Y) * ((E.gt(x + 2, y, z + 1, Z) - E.gt(x, y, z + 1, Z)) / dx - (E.gt(x + 1, y, z + 2, X) - E.gt(x + 1, y, z, X)) / dz));
 
-                this->setNode(x + 1, y + 1, z, Z, this->getNode(x + 1, y + 1, z, Z) + c.getNode(x + 1, y + 1, z, Z) * ((E.getNode(x + 1, y + 2, z, X) - E.getNode(x + 1, y, z, X)) / dy - (E.getNode(x + 2, y + 1, z, Y) - E.getNode(x, y + 1, z, Y)) / dx));
+                this->setNode(x + 1, y + 1, z, Z, this->gt(x + 1, y + 1, z, Z) + c.gt(x + 1, y + 1, z, Z) * ((E.gt(x + 1, y + 2, z, X) - E.gt(x + 1, y, z, X)) / dy - (E.gt(x + 2, y + 1, z, Y) - E.gt(x, y + 1, z, Y)) / dx));
             }
         }
     }
@@ -87,17 +87,17 @@ void Field::saveExToFileZ(const std::string &filename, int comp)
     {
         for (int x = 1; x < len_x - 1; x++)
         {
-            float val = getNode(x, y, z, comp);
+            float val = gt(x, y, z, comp);
             if (val == 0)
             {
-                val = getNode(x - 1, y, z, comp) +
-                      getNode(x, y - 1, z, comp) +
-                      getNode(x + 1, y, z, comp) +
-                      getNode(x, y + 1, z, comp) +
-                      getNode(x + 1, y + 1, z, comp) +
-                      getNode(x + 1, y - 1, z, comp) +
-                      getNode(x - 1, y + 1, z, comp) +
-                      getNode(x - 1, y - 1, z, comp);
+                val = gt(x - 1, y, z, comp) +
+                      gt(x, y - 1, z, comp) +
+                      gt(x + 1, y, z, comp) +
+                      gt(x, y + 1, z, comp) +
+                      gt(x + 1, y + 1, z, comp) +
+                      gt(x + 1, y - 1, z, comp) +
+                      gt(x - 1, y + 1, z, comp) +
+                      gt(x - 1, y - 1, z, comp);
                 val = val / 8;
             }
             file << val << " ";
@@ -122,7 +122,7 @@ void Field::saveGraphZ(const std::string &filename, int comp)
     int x = len_x / 2;
     for (int y = 0; y < len_y; y++)
     {
-        file << getNode(x, y, z, comp) << " ";
+        file << gt(x, y, z, comp) << " ";
     }
 
     file.close();
@@ -162,7 +162,7 @@ void Field::saveExToFileX(const std::string &filename, int comp)
     {
         for (int y = 0; y < len_y; y++)
         {
-            file << getNode(x, y, z, comp) << " ";
+            file << gt(x, y, z, comp) << " ";
         }
         file << std::endl;
     }
@@ -185,7 +185,7 @@ void Field::saveExToFileY(const std::string &filename, int comp)
     {
         for (int z = 1; z < len_z - 1; z++)
         {
-            file << getNode(x, y, z, comp) << " ";
+            file << gt(x, y, z, comp) << " ";
         }
         file << std::endl;
     }
@@ -199,7 +199,6 @@ void FDTD::update(float time)
     time += _time;
     while (time > _time)
     {
-
         H.updateH(E, c);
         E.updateE(H, J, c1, c2);
 #ifdef MUR
@@ -226,9 +225,9 @@ void FDTD::initCoeffi()
             {
                 for (size_t comp = X; comp <= Z; comp++)
                 {
-                    c.setNode(x, y, z, comp, dt / (Mu.getNode(x, y, z, comp) * mu0));
-                    c1.setNode(x, y, z, comp, ((Eps.getNode(x, y, z, comp) * epsilon0) - (0.5 * Sigm.getNode(x, y, z, comp) * dt)) / ((Eps.getNode(x, y, z, comp) * epsilon0) + (0.5 * Sigm.getNode(x, y, z, comp) * dt)));
-                    c2.setNode(x, y, z, comp, dt / ((Eps.getNode(x, y, z, comp) * epsilon0) + (0.5 * Sigm.getNode(x, y, z, comp) * dt)));
+                    c.setNode(x, y, z, comp, dt / (Mu.gt(x, y, z, comp) * mu0));
+                    c1.setNode(x, y, z, comp, ((Eps.gt(x, y, z, comp) * epsilon0) - (0.5 * Sigm.gt(x, y, z, comp) * dt)) / ((Eps.gt(x, y, z, comp) * epsilon0) + (0.5 * Sigm.gt(x, y, z, comp) * dt)));
+                    c2.setNode(x, y, z, comp, dt / ((Eps.gt(x, y, z, comp) * epsilon0) + (0.5 * Sigm.gt(x, y, z, comp) * dt)));
                 }
             }
         }

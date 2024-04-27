@@ -61,9 +61,9 @@ public:
         nodesE = VECTOR_3D(len_x, VECTOR_2D(len_y, VECTOR(3, _value)));
     }
 
-    float getNode(float x, float y, float z, int comp);
+    float gt(float x, float y, float z, int comp);
     void setNode(float x, float y, float z, int comp, float value);
-    float getNodeOld(float x, float y, float z, int comp);
+    float gtO(float x, float y, float z, int comp);
 
     void updateE(Field &H, Field &J, Field &c1, Field &c2);
     void updateH(Field &E, Field &c);
@@ -206,7 +206,7 @@ public:
 //         {
 //             for (int z = 0; z < z_size; ++z)
 //             {
-//                 float amplitude = (amplitudes.getNode(x, y, z, X) + amplitudes.getNode(x, y, z, Y) + amplitudes.getNode(x, y, z, Z)) / 3;
+//                 float amplitude = (amplitudes.gt(x, y, z, X) + amplitudes.gt(x, y, z, Y) + amplitudes.gt(x, y, z, Z)) / 3;
 
 //                 sf::Color color(static_cast<sf::Uint8>(amplitude * 255), 0, 0);
 //                 image.setPixel(x, y, color);
