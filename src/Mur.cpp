@@ -12,6 +12,14 @@ H.setNode(x, y, z, axis,    \
 (H.gtO(x1, y1, z1, axis) + cf * (H.gtO(x, y, z, axis) - \
 H.gt(x1, y1, z1, axis)))); })
 
+#define mur(x, y, z, x1, y1, z1, cf) ({ \
+murH(x, y, z, x1, y1, z1, cf, X);\
+murH(x, y, z, x1, y1, z1, cf, Y);\
+murH(x, y, z, x1, y1, z1, cf, Z);\
+murE(x, y, z, x1, y1, z1, cf, X);\
+murE(x, y, z, x1, y1, z1, cf, Y);\
+murE(x, y, z, x1, y1, z1, cf, Z);})
+
 void FDTD::MursFirstABC()
 {
     // std::cout << "MursFirstABC\n";
@@ -37,24 +45,8 @@ void FDTD::MursFirstABC()
         for (int K = s; K <= z; K++)
         {
             // std::cout << K << "-" << J << "\n";
-            murE(s, J, K, s1, J, K, _cfMur, X);
-            murE(s, J, K, s1, J, K, _cfMur, Y);
-            murE(s, J, K, s1, J, K, _cfMur, Z);
-
-            murE(x, J, K, x1, J, K, _cfMur, X);
-            murE(x, J, K, x1, J, K, _cfMur, Y);
-            murE(x, J, K, x1, J, K, _cfMur, Z);
-
-
-
-            murH(s, J, K, s1, J, K, _cfMur, X);
-            murH(s, J, K, s1, J, K, _cfMur, Y);
-            murH(s, J, K, s1, J, K, _cfMur, Z);
-
-            murH(x, J, K, x1, J, K, _cfMur, X);
-            murH(x, J, K, x1, J, K, _cfMur, Y);
-            murH(x, J, K, x1, J, K, _cfMur, Z);
-
+            mur(s, J, K, s1, J, K, _cfMur);
+            mur(x, J, K, x1, J, K, _cfMur);
         }
     }
     // ВЕРХНЯЯ И НИЖНЯЯ ПЛОСКОСТИ
@@ -65,23 +57,8 @@ void FDTD::MursFirstABC()
     {
         for (int I = s; I <= x; I++)
         {
-            murE(I, s, K, I, s1, K, _cfMur, X);
-            murE(I, s, K, I, s1, K, _cfMur, Y);
-            murE(I, s, K, I, s1, K, _cfMur, Z);
-
-            murE(I, y, K, I, y1, K, _cfMur, X);
-            murE(I, y, K, I, y1, K, _cfMur, Y);
-            murE(I, y, K, I, y1, K, _cfMur, Z);
-
-
-
-            murH(I, s, K, I, s1, K, _cfMur, X);
-            murH(I, s, K, I, s1, K, _cfMur, Y);
-            murH(I, s, K, I, s1, K, _cfMur, Z);
-
-            murH(I, y, K, I, y1, K, _cfMur, X);
-            murH(I, y, K, I, y1, K, _cfMur, Y);
-            murH(I, y, K, I, y1, K, _cfMur, Z);
+            mur(I, s, K, I, s1, K, _cfMur);
+            mur(I, y, K, I, y1, K, _cfMur);
         }
     }
 
@@ -93,23 +70,8 @@ void FDTD::MursFirstABC()
     {
         for (int J = s; J <= y; J++)
         {
-            murE(I, J, s, I, J, s1, _cfMur, X);
-            murE(I, J, s, I, J, s1, _cfMur, Y);
-            murE(I, J, s, I, J, s1, _cfMur, Z);
-
-            murE(I, J, z, I, J, z1, _cfMur, X);
-            murE(I, J, z, I, J, z1, _cfMur, Y);
-            murE(I, J, z, I, J, z1, _cfMur, Z);
-
-
-
-            murH(I, J, s, I, J, s1, _cfMur, X);
-            murH(I, J, s, I, J, s1, _cfMur, Y);
-            murH(I, J, s, I, J, s1, _cfMur, Z);
-
-            murH(I, J, z, I, J, z1, _cfMur, X);
-            murH(I, J, z, I, J, z1, _cfMur, Y);
-            murH(I, J, z, I, J, z1, _cfMur, Z);
+            mur(I, J, s, I, J, s1, _cfMur);
+            mur(I, J, z, I, J, z1, _cfMur);
         }
     }
 
@@ -118,37 +80,10 @@ void FDTD::MursFirstABC()
 
         for (int K = s; K <= z; K++)
         {
-            murE(s, s, K, s1, s1, K, _cfMur, X);
-            murE(s, y, K, s1, y1, K, _cfMur, X);
-            murE(x, s, K, x1, s1, K, _cfMur, X);
-            murE(x, y, K, x1, y1, K, _cfMur, X);
-
-            murE(s, s, K, s1, s1, K, _cfMur, Y);
-            murE(s, y, K, s1, y1, K, _cfMur, Y);
-            murE(x, s, K, x1, s1, K, _cfMur, Y);
-            murE(x, y, K, x1, y1, K, _cfMur, Y);
-
-            murE(s, s, K, s1, s1, K, _cfMur, Z);
-            murE(s, y, K, s1, y1, K, _cfMur, Z);
-            murE(x, s, K, x1, s1, K, _cfMur, Z);
-            murE(x, y, K, x1, y1, K, _cfMur, Z);
-
-
-
-            murH(s, s, K, s1, s1, K, _cfMur, X);
-            murH(s, y, K, s1, y1, K, _cfMur, X);
-            murH(x, s, K, x1, s1, K, _cfMur, X);
-            murH(x, y, K, x1, y1, K, _cfMur, X);
-
-            murH(s, s, K, s1, s1, K, _cfMur, Y);
-            murH(s, y, K, s1, y1, K, _cfMur, Y);
-            murH(x, s, K, x1, s1, K, _cfMur, Y);
-            murH(x, y, K, x1, y1, K, _cfMur, Y);
-
-            murH(s, s, K, s1, s1, K, _cfMur, Z);
-            murH(s, y, K, s1, y1, K, _cfMur, Z);
-            murH(x, s, K, x1, s1, K, _cfMur, Z);
-            murH(x, y, K, x1, y1, K, _cfMur, Z);
+            mur(s, s, K, s1, s1, K, _cfMur);
+            mur(s, y, K, s1, y1, K, _cfMur);
+            mur(x, s, K, x1, s1, K, _cfMur);
+            mur(x, y, K, x1, y1, K, _cfMur);
         }
 
     // РЕБРА, параллельные оси Y
@@ -157,37 +92,10 @@ void FDTD::MursFirstABC()
         size_t cf = Y;
         for (int J = s; J <= y; J++)
         {
-            murE(s, J, s, s1, J, s1, _cfMur, X);
-            murE(s, J, z, s1, J, z1, _cfMur, X);
-            murE(x, J, s, x1, J, s1, _cfMur, X);
-            murE(x, J, z, x1, J, z1, _cfMur, X);
-
-            murE(s, J, s, s1, J, s1, _cfMur, Y);
-            murE(s, J, z, s1, J, z1, _cfMur, Y);
-            murE(x, J, s, x1, J, s1, _cfMur, Y);
-            murE(x, J, z, x1, J, z1, _cfMur, Y);
-
-            murE(s, J, s, s1, J, s1, _cfMur, Z);
-            murE(s, J, z, s1, J, z1, _cfMur, Z);
-            murE(x, J, s, x1, J, s1, _cfMur, Z);
-            murE(x, J, z, x1, J, z1, _cfMur, Z);
-
-
-
-            murH(s, J, s, s1, J, s1, _cfMur, X);
-            murH(s, J, z, s1, J, z1, _cfMur, X);
-            murH(x, J, s, x1, J, s1, _cfMur, X);
-            murH(x, J, z, x1, J, z1, _cfMur, X);
-
-            murH(s, J, s, s1, J, s1, _cfMur, Y);
-            murH(s, J, z, s1, J, z1, _cfMur, Y);
-            murH(x, J, s, x1, J, s1, _cfMur, Y);
-            murH(x, J, z, x1, J, z1, _cfMur, Y);
-
-            murH(s, J, s, s1, J, s1, _cfMur, Z);
-            murH(s, J, z, s1, J, z1, _cfMur, Z);
-            murH(x, J, s, x1, J, s1, _cfMur, Z);
-            murH(x, J, z, x1, J, z1, _cfMur, Z);
+            mur(s, J, s, s1, J, s1, _cfMur);
+            mur(s, J, z, s1, J, z1, _cfMur);
+            mur(x, J, s, x1, J, s1, _cfMur);
+            mur(x, J, z, x1, J, z1, _cfMur);
         }
 
     // РЕБРА, параллельные оси X
@@ -195,37 +103,10 @@ void FDTD::MursFirstABC()
         for (int I = s; I <= x; I++)
         {
             // std::cout << I << "\n";
-            murE(I, s, s, I, s1, s1, _cfMur, X);
-            murE(I, s, z, I, s1, z1, _cfMur, X);
-            murE(I, y, s, I, y1, s1, _cfMur, X);
-            murE(I, y, z, I, y1, z1, _cfMur, X);
-
-            murE(I, s, s, I, s1, s1, _cfMur, Y);
-            murE(I, s, z, I, s1, z1, _cfMur, Y);
-            murE(I, y, s, I, y1, s1, _cfMur, Y);
-            murE(I, y, z, I, y1, z1, _cfMur, Y);
-
-            murE(I, s, s, I, s1, s1, _cfMur, Z);
-            murE(I, s, z, I, s1, z1, _cfMur, Z);
-            murE(I, y, s, I, y1, s1, _cfMur, Z);
-            murE(I, y, z, I, y1, z1, _cfMur, Z);
-
-
-
-            murH(I, s, s, I, s1, s1, _cfMur, X);
-            murH(I, s, z, I, s1, z1, _cfMur, X);
-            murH(I, y, s, I, y1, s1, _cfMur, X);
-            murH(I, y, z, I, y1, z1, _cfMur, X);
-
-            murH(I, s, s, I, s1, s1, _cfMur, Y);
-            murH(I, s, z, I, s1, z1, _cfMur, Y);
-            murH(I, y, s, I, y1, s1, _cfMur, Y);
-            murH(I, y, z, I, y1, z1, _cfMur, Y);
-            
-            murH(I, s, s, I, s1, s1, _cfMur, Z);
-            murH(I, s, z, I, s1, z1, _cfMur, Z);
-            murH(I, y, s, I, y1, s1, _cfMur, Z);
-            murH(I, y, z, I, y1, z1, _cfMur, Z);
+            mur(I, s, s, I, s1, s1, _cfMur);
+            mur(I, s, z, I, s1, z1, _cfMur);
+            mur(I, y, s, I, y1, s1, _cfMur);
+            mur(I, y, z, I, y1, z1, _cfMur);
         }
 }
 

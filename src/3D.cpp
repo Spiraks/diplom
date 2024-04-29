@@ -12,7 +12,7 @@
 
 int main(void)
 {
-    int size = 100;
+    int size = 90;
     int _x = size;
     int _y = size;
     int _z = size;
@@ -27,7 +27,7 @@ int main(void)
 
     float j = 1;
 
-    int tick = 170;
+    int tick = 270;
     int step = 5;
     std::string name = ".txt";
     for (int i = 0; i < tick; i++)

@@ -1,0 +1,60 @@
+for t = 0:9
+num_str = num2str(t);
+str1 = strcat("mur_Ex",num_str,".txt");
+str2 = strcat("mur_Ey",num_str,".txt");
+Ex = load(str1);
+Ey = load(str2);
+figure ; streamslice(Ex, Ey);
+end;
+--------------------------------------------------------------------------------
+
+Ex = load("mur_Ex.txt");
+Ey = load("mur_Ey.txt");
+figure ; streamslice(Ex, Ey);
+________________________________________________________________________________
+
+num_frames = 1; % количество кадров
+for i = 1:num_frames
+num_str = num2str(i);
+str1 = strcat("mur_Ex",num_str,".txt");
+str2 = strcat("mur_Ey",num_str,".txt");
+mat_x = readmatrix(str1);
+mat_y = readmatrix(str2);
+Ex = mat_x(1:145,1:145);
+Ey = mat_y(1:145,1:145);
+figure ; streamslice(Ex, Ey);
+frame = getframe(gcf);
+im = frame2im(frame);
+[imind,cmf] = rgb2ind(im,256);
+if i == 1
+imwrite(imind,cmf,'testAnimated.gif','gif', 'Loopcount',inf);
+else
+imwrite(imind,cmf,'testAnimated.gif','gif','WriteMode','append', 'DelayTime',0.5);
+end
+end
+
+
+________________________________________________________________________________
+num_frames = 20; % количество кадров
+for i = 1:num_frames
+num_str = num2str(i);
+str1 = strcat("mur_Ex",num_str,".txt");
+str2 = strcat("mur_Ey",num_str,".txt");
+mat_x = readmatrix(str1);
+mat_y = readmatrix(str2);
+Ex = mat_x(1:145,1:145);
+Ey = mat_y(1:145,1:145);
+figure;
+daspect([1 1 1]);
+axis([0 130 0 130]);
+axis equal tight;
+streamslice(Ex, Ey);
+frame = getframe(gcf);
+im = frame2im(frame);
+[imind,cmf] = rgb2ind(im,256);
+if i == 1
+imwrite(imind,cmf,'testAnimated.gif','gif', 'Loopcount',inf);
+else
+imwrite(imind,cmf,'testAnimated.gif','gif','WriteMode','append', 'DelayTime',0.5);
+end
+end
