@@ -12,7 +12,7 @@
 
 int main(void)
 {
-    int size = 90;
+    int size = 71;
     int _x = size;
     int _y = size;
     int _z = size;
@@ -26,10 +26,11 @@ int main(void)
     FDTD grid(mesh, obj);
 
     float j = 1;
-
-    int tick = 270;
+    int tick = 2;
     int step = 5;
     std::string name = ".txt";
+    auto start = std::chrono::system_clock::now();
+
     for (int i = 0; i < tick; i++)
     {
         for (int z = 0; z < _z; z++)
@@ -40,10 +41,15 @@ int main(void)
         }
         grid.update(dt);
     }
-    grid.H.saveExToFileZ(path + "mur_Ex" + std::to_string(0) + name, X);
-    grid.H.saveExToFileZ(path + "mur_Ey" + std::to_string(0) + name, Y);
+    grid.H.saveToFile("/home/alex/src/diplom_FDTD/results/mur_");
+
+    // grid.H.saveExToFileY(path + "mur_Eyx" + std::to_string(0) + name, X);
+    // grid.H.saveExToFileY(path + "mur_Eyz" + std::to_string(0) + name, Z);
+
+    // grid.H.saveExToFileX(path + "mur_Exy" + std::to_string(0) + name, Y);
+    // grid.H.saveExToFileX(path + "mur_Exz" + std::to_string(0) + name, Z);
     // size_t num = 1;
-    // for (int i = 0; i < 40; i++)
+    // for (int i = 0; i < 50; i++)
     // {
     //     for (int z = 0; z < _z; z++)
     //     {
@@ -54,12 +60,15 @@ int main(void)
     //     grid.update(dt);
     //     if (i % step == 0)
     //     {
-
-    //         grid.H.saveExToFileZ(path + "mur_Ex" + std::to_string(num) + name, X);
-    //         grid.H.saveExToFileZ(path + "mur_Ey" + std::to_string(num) + name, Y);
+    //         grid.H.saveExToFileZ(path + "mur_Ezx" + std::to_string(num) + name, X);
+    //         grid.H.saveExToFileZ(path + "mur_Ezy" + std::to_string(num) + name, Y);
     //         num++;
     //     }
     // }
-    system("canberra-gtk-play -f /home/alex/src/diplom_FDTD/gtr-nylon22.wav");
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end - start;
+    std::cout << "elapsed time: " << elapsed_seconds.count() << "s"
+              << std::endl;
+    // system("canberra-gtk-play -f /home/alex/src/diplom_FDTD/boom.mp3");
     return 0;
 }

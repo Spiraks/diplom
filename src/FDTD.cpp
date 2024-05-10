@@ -1,6 +1,7 @@
 
 #include "FDTD.h"
 #include <cmath>
+// #include "omp.h"
 
 float Field::gt(float x, float y, float z, int comp)
 {
@@ -24,16 +25,20 @@ void Field::updateE(Field &H, Field &J, Field &c1, Field &c2)
 {
 
     float k = (dt / epsilon0);
-    for (float z = 2; z < len_z - 2; z++)
+
+    // #pragma omp target teams distribute parallel for collapse(2) map(tofrom: H, J, c1,c2)
+    for (int z = 2; z < len_z - 2; z++)
     {
-        for (float y = 2; y < len_y - 2; y++)
+        for (int y = 2; y < len_y - 2; y++)
         {
-            for (float x = 2; x < len_x - 2; x++)
+            for (int x = 2; x < len_x - 2; x++)
             {
                 // Не считаем обьект
                 // if (x > obj_x && x < obj_x + _obj_len_x)
                 //     if (y > obj_y && y < obj_y + _obj_len_y)
                 //         continue;
+                // if(x>len_x - 4 && z>len_z - 4 && y>len_y - 4)
+                // std::cout<<"Ex"<< x <<"-" << y << "-" << z<< "\n";
                 this->setNode(x + 1, y, z, X,
                               c1.gt(x + 1, y, z, X) * this->gt(x + 1, y, z, X) +
                                   c2.gt(x + 1, y, z, X) *
@@ -51,11 +56,13 @@ void Field::updateE(Field &H, Field &J, Field &c1, Field &c2)
 
 void Field::updateH(Field &E, Field &c)
 {
-    for (float z = 1; z < len_z - 2; z++)
+
+    // #pragma omp target teams distribute parallel for collapse(2) map(tofrom: E, c)
+    for (int z = 1; z < len_z - 2; z++)
     {
-        for (float y = 1; y < len_y - 2; y++)
+        for (int y = 1; y < len_y - 2; y++)
         {
-            for (float x = 1; x < len_x - 2; x++)
+            for (int x = 1; x < len_x - 2; x++)
             {
 
                 // Не считаем обьект
@@ -98,6 +105,42 @@ void Field::saveExToFileZ(const std::string &filename, int comp)
                       gt(x + 1, y - 1, z, comp) +
                       gt(x - 1, y + 1, z, comp) +
                       gt(x - 1, y - 1, z, comp);
+                val = val / 8;
+            }
+            file << val << " ";
+        }
+        file << std::endl;
+    }
+
+    file.close();
+    std::cout << "Данные E" << comp << " сохранены в файле: " << filename << std::endl;
+}
+
+void Field::saveExToFileY(const std::string &filename, int comp)
+{
+    std::ofstream file(filename);
+
+    if (!file.is_open())
+    {
+        std::cerr << "Ошибка открытия файла для записи: " << filename << std::endl;
+        return;
+    }
+    int y = len_y / 2;
+    for (int x = 1; x < len_x - 1; x++)
+    {
+        for (int z = 1; z < len_z - 1; z++)
+        {
+            float val = gt(x, y, z, comp);
+            if (val == 0)
+            {
+                val = gt(x - 1, y, z, comp) +
+                      gt(x, y, z - 1, comp) +
+                      gt(x + 1, y, z, comp) +
+                      gt(x, y, z + 1, comp) +
+                      gt(x + 1, y, z + 1, comp) +
+                      gt(x + 1, y, z - 1, comp) +
+                      gt(x - 1, y, z + 1, comp) +
+                      gt(x - 1, y, z - 1, comp);
                 val = val / 8;
             }
             file << val << " ";
@@ -158,34 +201,26 @@ void Field::saveExToFileX(const std::string &filename, int comp)
         return;
     }
     int x = len_x / 2;
-    for (int z = 0; z < len_z; z++)
+    for (int z = 1; z < len_z - 1; z++)
     {
-        for (int y = 0; y < len_y; y++)
+        for (int y = 1; y < len_y - 1; y++)
         {
-            file << gt(x, y, z, comp) << " ";
-        }
-        file << std::endl;
-    }
+            float val = gt(x, y, z, comp);
+            // std::cout<< y << "-" << z<< "\n";
 
-    file.close();
-    std::cout << "Данные E" << comp << " сохранены в файле: " << filename << std::endl;
-}
-
-void Field::saveExToFileY(const std::string &filename, int comp)
-{
-    std::ofstream file(filename);
-
-    if (!file.is_open())
-    {
-        std::cerr << "Ошибка открытия файла для записи: " << filename << std::endl;
-        return;
-    }
-    int y = len_y / 2;
-    for (int x = 1; x < len_x - 1; x++)
-    {
-        for (int z = 1; z < len_z - 1; z++)
-        {
-            file << gt(x, y, z, comp) << " ";
+            if (val == 0)
+            {
+                val = gt(x, y, z - 1, comp) +
+                      gt(x, y - 1, z, comp) +
+                      gt(x, y, z + 1, comp) +
+                      gt(x, y + 1, z, comp) +
+                      gt(x, y + 1, z + 1, comp) +
+                      gt(x, y - 1, z + 1, comp) +
+                      gt(x, y + 1, z - 1, comp) +
+                      gt(x, y - 1, z - 1, comp);
+                val = val / 8;
+            }
+            file << val << " ";
         }
         file << std::endl;
     }
@@ -205,7 +240,7 @@ void FDTD::update(float time)
         std::cout << "MUR\n";
         if (_time >= dt)
         {
-            MursFirstABC();
+            Mur();
         }
         GetBorderValues();
 #endif
@@ -217,11 +252,11 @@ void FDTD::update(float time)
 }
 void FDTD::initCoeffi()
 {
-    for (float z = 1; z < len_z - 2; z++)
+    for (int z = 1; z < len_z - 2; z++)
     {
-        for (float y = 1; y < len_y - 2; y++)
+        for (int y = 1; y < len_y - 2; y++)
         {
-            for (float x = 1; x < len_x - 2; x++)
+            for (int x = 1; x < len_x - 2; x++)
             {
                 for (size_t comp = X; comp <= Z; comp++)
                 {
@@ -232,4 +267,92 @@ void FDTD::initCoeffi()
             }
         }
     }
+}
+
+void Field::saveToFile(const std::string &filename)
+{
+    std::ofstream file_x(filename + "X.txt");
+    std::ofstream file_y(filename + "Y.txt");
+    std::ofstream file_z(filename + "Z.txt");
+
+    if (!file_x.is_open())
+    {
+        std::cerr << "Ошибка открытия файла для записи: X" << filename << std::endl;
+        return;
+    }
+    if (!file_y.is_open())
+    {
+        std::cerr << "Ошибка открытия файла для записи: Y" << filename << std::endl;
+        return;
+    }
+    if (!file_z.is_open())
+    {
+        std::cerr << "Ошибка открытия файла для записи: Z" << filename << std::endl;
+        return;
+    }
+    for (int z = 1; z < len_z - 1; z++)
+    {
+        for (int y = 1; y < len_y - 1; y++)
+        {
+            for (int x = 1; x < len_x - 1; x++)
+            {
+
+                float val = gt(x, y, z, X);
+                if (val == 0)
+                {
+                    val = gt(x - 1, y, z, X) +
+                          gt(x, y - 1, z, X) +
+                          gt(x + 1, y, z, X) +
+                          gt(x, y + 1, z, X) +
+                          gt(x + 1, y + 1, z, X) +
+                          gt(x + 1, y - 1, z, X) +
+                          gt(x - 1, y + 1, z, X) +
+                          gt(x - 1, y - 1, z, X);
+                    val = val / 8;
+                }
+                file_x << val << " ";
+
+                val = gt(x, y, z, Y);
+                if (val == 0)
+                {
+                    val = gt(x - 1, y, z, Y) +
+                          gt(x, y - 1, z, Y) +
+                          gt(x + 1, y, z, Y) +
+                          gt(x, y + 1, z, Y) +
+                          gt(x + 1, y + 1, z, Y) +
+                          gt(x + 1, y - 1, z, Y) +
+                          gt(x - 1, y + 1, z, Y) +
+                          gt(x - 1, y - 1, z, Y);
+                    val = val / 8;
+                }
+                file_y << val << " ";
+
+                val = gt(x, y, z, Z);
+                if (val == 0)
+                {
+                    val = gt(x - 1, y, z, Z) +
+                          gt(x, y - 1, z, Z) +
+                          gt(x + 1, y, z, Z) +
+                          gt(x, y + 1, z, Z) +
+                          gt(x + 1, y + 1, z, Z) +
+                          gt(x + 1, y - 1, z, Z) +
+                          gt(x - 1, y + 1, z, Z) +
+                          gt(x - 1, y - 1, z, Z);
+                    val = val / 8;
+                }
+                file_z << val << " ";
+            }
+            file_x << std::endl;
+            file_y << std::endl;
+            file_z << std::endl;
+        }
+        file_x << std::endl;
+        file_y << std::endl;
+        file_z << std::endl;
+    }
+
+    file_x << std::endl;
+    file_y << std::endl;
+    file_z << std::endl;
+    std::cout << "Данные сохранены в файле: " << filename << std::endl;
 }

@@ -58,3 +58,13 @@ else
 imwrite(imind,cmf,'testAnimated.gif','gif','WriteMode','append', 'DelayTime',0.5);
 end
 end
+________________________________________________________________________________
+data_x = dlmread("mur_X.txt");
+data_y = dlmread("mur_Y.txt");
+data_z = dlmread("mur_Z.txt");
+
+X = reshape(data_x, 69,69,69);
+Y = reshape(data_y, 69,69,69);
+Z = reshape(data_z, 69,69,69);
+[I,J,K] = meshgrid(1:1:69,1:1:69,1:1:69);
+figure ; streamslice(I,J,K,X, Y,Z);

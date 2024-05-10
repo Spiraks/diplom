@@ -71,6 +71,7 @@ public:
     void saveExToFileZ(const std::string &filename, int comp);
     void saveExToFileX(const std::string &filename, int comp);
     void saveExToFileY(const std::string &filename, int comp);
+    void saveToFile(const std::string &filename);
 
     void saveGraphZ(const std::string &filename, int comp);
     void saveRangeY();
@@ -169,7 +170,7 @@ public:
         E = Field(mesh, obj);
         H = Field(mesh, obj);
         J = Field(mesh, obj);
-        Sigm = Field(mesh, obj, 2.0e-14); // 2 -14
+        Sigm = Field(mesh, obj, 2.0e-5); // 2 -14
         Eps = Field(mesh, obj, 1.00057);  // 1.00057
         Mu = Field(mesh, obj, 0.999991);  // 0.999991
         c = Field(mesh, obj);
@@ -182,7 +183,7 @@ public:
     }
     void update(float time);
     void initCoeffi();
-    void MursFirstABC();
+    void Mur();
     void GetBorderValues();
 };
 
