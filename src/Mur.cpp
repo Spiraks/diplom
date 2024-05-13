@@ -20,13 +20,7 @@ _murE(x, y, z, x1, y1, z1, cf, X);\
 _murE(x, y, z, x1, y1, z1, cf, Y);\
 _murE(x, y, z, x1, y1, z1, cf, Z); })
 
-#define mur(x, y, z, x1, y1, z1, cf) ({ \
-_murE(x, y, z, x1, y1, z1, cf, X);\
-_murE(x, y, z, x1, y1, z1, cf, Y);\
-_murE(x, y, z, x1, y1, z1, cf, Z);\
-_murH(x, y, z, x1, y1, z1, cf, X);\
-_murH(x, y, z, x1, y1, z1, cf, Y);\
-_murH(x, y, z, x1, y1, z1, cf, Z); })
+
 
 #define _minus() ({\
     s++;\
@@ -47,6 +41,14 @@ _murH(x, y, z, x1, y1, z1, cf, Z); })
     y1++;\
     z++;\
     z1++; })
+
+#define mur(x, y, z, x1, y1, z1, cf) ({ \
+_murE(x, y, z, x1, y1, z1, cf, X);\
+_murE(x, y, z, x1, y1, z1, cf, Y);\
+_murE(x, y, z, x1, y1, z1, cf, Z);\
+_murH(x, y, z, x1, y1, z1, cf, X);\
+_murH(x, y, z, x1, y1, z1, cf, Y);\
+_murH(x, y, z, x1, y1, z1, cf, Z); })
 
 void FDTD::Mur()
 {
@@ -69,9 +71,9 @@ void FDTD::Mur()
     // Ey для двух плоскостей YxZ [левой и правой]
     float _cfMur = (Mur_Tx - 1) / (Mur_Tx + 1);
 
-    for (int J = s; J <= y; J++)
+    for (size_t J = s; J <= y; J++)
     {
-        for (int K = s; K <= z; K++)
+        for (size_t K = s; K <= z; K++)
         {
             // std::cout << K << "-" << J << "\n";
             mur(s, J, K, s1, J, K, _cfMur);
@@ -82,9 +84,9 @@ void FDTD::Mur()
     //  Ex для двух плоскостей XxZ [верхней и нижней]
     // Ez для двух плоскостей XxZ [верхней и нижней]
 
-    for (int K = s; K <= z; K++)
+    for (size_t K = s; K <= z; K++)
     {
-        for (int I = s; I <= x; I++)
+        for (size_t I = s; I <= x; I++)
         {
             mur(I, s, K, I, s1, K, _cfMur);
             mur(I, y, K, I, y1, K, _cfMur);
@@ -95,9 +97,9 @@ void FDTD::Mur()
     // Ey для двух плоскостей XxY [ближней и дальней]
     // Ex для двух плоскостей XxY [ближней и дальней]
     // std::cout << "5 Ey для двух плоскостей XxY [ближней и дальней]\n";
-    for (int I = s; I <= x; I++)
+    for (size_t I = s; I <= x; I++)
     {
-        for (int J = s; J <= y; J++)
+        for (size_t J = s; J <= y; J++)
         {
             mur(I, J, s, I, J, s1, _cfMur);
             mur(I, J, z, I, J, z1, _cfMur);
@@ -107,7 +109,7 @@ void FDTD::Mur()
     // РЕБРА, параллельные оси Z
     // std::cout << "7 РЕБРА, параллельные оси Z\n";
 
-    for (int K = s; K <= z; K++)
+    for (size_t K = s; K <= z; K++)
     {
         mur(s, s, K, s1, s1, K, _cfMur);
         mur(s, y, K, s1, y1, K, _cfMur);
@@ -118,7 +120,7 @@ void FDTD::Mur()
     // РЕБРА, параллельные оси Y
     // std::cout << "8 РЕБРА, параллельные оси Y\n";
 
-    for (int J = s; J <= y; J++)
+    for (size_t J = s; J <= y; J++)
     {
         mur(s, J, s, s1, J, s1, _cfMur);
         mur(s, J, z, s1, J, z1, _cfMur);
@@ -129,7 +131,7 @@ void FDTD::Mur()
 
     // РЕБРА, параллельные оси X
     // std::cout << "9 РЕБРА, параллельные оси X\n";
-    for (int I = s; I <= x; I++)
+    for (size_t I = s; I <= x; I++)
     {
         mur(I, s, s, I, s1, s1, _cfMur);
         mur(I, s, z, I, s1, z1, _cfMur);
@@ -138,7 +140,7 @@ void FDTD::Mur()
     }
 }
 
-void FDTD::GetBorderValues()
+void FDTD::GetBorderValuesMur()
 {
     E.copyNodes();
     H.copyNodes();

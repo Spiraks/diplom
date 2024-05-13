@@ -1,0 +1,6 @@
+.clang-format
+.vscode/
+boom.mp3
+build/
+*.gif
+*.txt

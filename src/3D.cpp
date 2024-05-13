@@ -1,4 +1,3 @@
-#include <SFML/Graphics.hpp>
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
@@ -26,14 +25,14 @@ int main(void)
     FDTD grid(mesh, obj);
 
     float j = 1;
-    int tick = 2;
+    int tick = 180;
     int step = 5;
     std::string name = ".txt";
     auto start = std::chrono::system_clock::now();
 
-    for (int i = 0; i < tick; i++)
+    for (size_t i = 0; i < tick; i++)
     {
-        for (int z = 0; z < _z; z++)
+        for (size_t z = 0; z < _z; z++)
         {
             grid.J.setNode(px1, py1, z, X, 1);
             grid.J.setNode(px1, py1, z, Y, 1);
@@ -41,30 +40,26 @@ int main(void)
         }
         grid.update(dt);
     }
-    grid.H.saveToFile("/home/alex/src/diplom_FDTD/results/mur_");
+    grid.H.saveExToFileZ(path + "mur_Ezx0" + name, X);
+    grid.H.saveExToFileZ(path + "mur_Ezy0" + name, Y);
 
-    // grid.H.saveExToFileY(path + "mur_Eyx" + std::to_string(0) + name, X);
-    // grid.H.saveExToFileY(path + "mur_Eyz" + std::to_string(0) + name, Z);
-
-    // grid.H.saveExToFileX(path + "mur_Exy" + std::to_string(0) + name, Y);
-    // grid.H.saveExToFileX(path + "mur_Exz" + std::to_string(0) + name, Z);
-    // size_t num = 1;
-    // for (int i = 0; i < 50; i++)
-    // {
-    //     for (int z = 0; z < _z; z++)
-    //     {
-    //         grid.J.setNode(px1, py1, z, X, 1);
-    //         grid.J.setNode(px1, py1, z, Y, 1);
-    //         grid.J.setNode(px1, py1, z, Z, 1);
-    //     }
-    //     grid.update(dt);
-    //     if (i % step == 0)
-    //     {
-    //         grid.H.saveExToFileZ(path + "mur_Ezx" + std::to_string(num) + name, X);
-    //         grid.H.saveExToFileZ(path + "mur_Ezy" + std::to_string(num) + name, Y);
-    //         num++;
-    //     }
-    // }
+    size_t num = 1;
+    for (size_t i = 0; i < 30; i++)
+    {
+        for (size_t z = 0; z < _z; z++)
+        {
+            grid.J.setNode(px1, py1, z, X, 1);
+            grid.J.setNode(px1, py1, z, Y, 1);
+            grid.J.setNode(px1, py1, z, Z, 1);
+        }
+        grid.update(dt);
+        if (i % step == 0)
+        {
+            grid.H.saveExToFileZ(path + "mur_Ezx" + std::to_string(num) + name, X);
+            grid.H.saveExToFileZ(path + "mur_Ezy" + std::to_string(num) + name, Y);
+            num++;
+        }
+    }
     auto end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
     std::cout << "elapsed time: " << elapsed_seconds.count() << "s"
