@@ -3,13 +3,12 @@
 #include <unistd.h>
 #include <math.h>
 #include <vector>
-#include "Obj.h"
 
 #define X 0
 #define Y 1
 #define Z 2
-#define MUR
-#define PML
+// #define MUR
+// #define PML
 
 #define VECTOR std::vector<float>
 #define VECTOR_2D std::vector<VECTOR>
@@ -50,21 +49,14 @@ class Field
 {
 public:
     Field() {}
-    Field(Mesh3D &mesh, Obj &obj, float value = 0)
+    Field(Mesh3D &mesh, float value = 0)
     {
         len_x = mesh.len_x;
         len_y = mesh.len_y;
         len_z = mesh.len_z;
-        obj_x = obj.get_obj_x();
-        obj_y = obj.get_obj_y();
-        obj_z = obj.get_obj_z();
-        _obj_len_x = obj.get__obj_len_x();
-        _obj_len_y = obj.get__obj_len_y();
-        _obj_len_z = obj.get__obj_len_z();
         this->_value = value;
         nodes = VECTOR_4D(len_x, VECTOR_3D(len_y, VECTOR_2D(len_z, VECTOR(3, _value))));
         nodes_1 = VECTOR_4D(len_x, VECTOR_3D(len_y, VECTOR_2D(len_z, VECTOR(3, _value))));
-        nodesE = VECTOR_3D(len_x, VECTOR_2D(len_y, VECTOR(3, _value)));
     }
 
     float gt(size_t x, size_t y, size_t z, size_t comp);
@@ -125,12 +117,6 @@ private:
     int len_x = 0;
     int len_y = 0;
     int len_z = 0;
-    int obj_x = 0;
-    int obj_y = 0;
-    int obj_z = 0;
-    int _obj_len_x = 0;
-    int _obj_len_y = 0;
-    int _obj_len_z = 0;
     float _value = 0;
     float min_x = 0;
     float min_y = 0;
@@ -141,7 +127,6 @@ private:
     VECTOR_4D nodes;
     //for mur
     VECTOR_4D nodes_1;
-    VECTOR_3D nodesE;
 };
 
 class FDTD
@@ -154,44 +139,61 @@ private:
     int len_x = 0;
     int len_y = 0;
     int len_z = 0;
+        #ifdef PML
+            #ifdef MUR
+                #error
+            #else
+        //for pml
+    float pmlBHX = 1;
+    float pmlBHZ = 1;
+    float pmlBHY = 1;
+    int plmLayerN = 15;
+    size_t plmLayerNMinus1 = plmLayerN - 1;
+    size_t plmLayerNMinus2 = plmLayerN - 2;
+    std::vector<float> pmlSigmaStarH;
+    std::vector<float> pmlSigmaStarE;
+    std::vector<float> pmlExpSigmaStarH; 
+    std::vector<float> pmlExpSigmaStarE;
 
-    //for pml
-
-        // по граням
+    // по граням
     V_PML_3D pmlXN;
     V_PML_3D pmlX ;
     V_PML_3D pmlYN;
     V_PML_3D pmlY ;
     V_PML_3D pmlZN;
     V_PML_3D pmlZ ;
+
     // по ребрам
+    V_PML_3D pmlXNYN;
+    V_PML_3D pmlXYN;
+    V_PML_3D pmlXNY;
+    V_PML_3D pmlXY;
+
+    V_PML_3D pmlZNYN;
+    V_PML_3D pmlZYN;
+    V_PML_3D pmlZNY;
+    V_PML_3D pmlZY;
+
+    V_PML_3D pmlZNXN;
+    V_PML_3D pmlZXN;
+    V_PML_3D pmlZNX;
+    V_PML_3D pmlZX;
+
     // по углам
+    V_PML_3D pmlXYZ;
+    V_PML_3D pmlXNYZ;
+    V_PML_3D pmlXYZN;
+    V_PML_3D pmlXYNZ;
+    V_PML_3D pmlXNYZN;
+    V_PML_3D pmlXYNZN;
+    V_PML_3D pmlXNYNZ;
+    V_PML_3D pmlXNYNZN;
+                #endif    
+        #endif
 
 public:
-    int obj_x = 75;
-    int obj_y = 75;
-    int _obj_len_x = 50;
-    int _obj_len_y = 50;
 
-    size_t s = 1;
-    size_t s1 = s + 1;
-    size_t end = 2;
-    size_t x = len_x - end;
-    size_t y = len_y - end;
-    size_t z = len_z - end;
-    size_t x1 = len_x - end - 1;
-    size_t y1 = len_y - end - 1;
-    size_t z1 = len_z - end - 1;
-    //for pml
-    float pmlBHX = 1;
-    float pmlBHZ = 1;
-    float pmlBHY = 1;
-    int plmLayerNumber = 10;
-    size_t plmLayerNumberMinus1 = plmLayerNumber - 1;
-    size_t plmLayerNumberMinus2 = plmLayerNumber - 2;
-    std::vector<float> pmlSigmaStarH;
-    std::vector<float> pmlSigmaStarE;
-    std::vector<float> pmlExpSigmaStarX; 
+
 
     Field E;
     Field H;
@@ -200,34 +202,66 @@ public:
     Field Eps; // 1.00057
     Field Mu;  // 0.999991
 
-    FDTD(Mesh3D &mesh, Obj &obj)
+    FDTD(Mesh3D &mesh)
     {
-        E = Field(mesh, obj);
-        H = Field(mesh, obj);
-        J = Field(mesh, obj);
-        Sigm = Field(mesh, obj, 2.0e-5); // 2 -14
-        Eps = Field(mesh, obj, 1.00057);  // 1.00057
-        Mu = Field(mesh, obj, 0.999991);  // 0.999991
-        c0 = Field(mesh, obj);
-        c1 = Field(mesh, obj);
-        c2 = Field(mesh, obj);
+        E = Field(mesh);
+        H = Field(mesh);
+        J = Field(mesh);
+        Sigm = Field(mesh, 2.0e-5); // 2 -14
+        Eps = Field(mesh, 1.00057);  // 1.00057
+        Mu = Field(mesh, 0.999991);  // 0.999991
+        c0 = Field(mesh);
+        c1 = Field(mesh);
+        c2 = Field(mesh);
         len_x = mesh.len_x;
         len_y = mesh.len_y;
         len_z = mesh.len_z;
-        pmlSigmaStarH = VECTOR(plmLayerNumber);
-        pmlSigmaStarE = VECTOR(plmLayerNumber);
-        pmlExpSigmaStarX = VECTOR(plmLayerNumber,1);
+        std::cout << "SIZE FIELD: \n" << "len_x = " << len_x << "\n"<<"len_y = " << len_y << "\n" <<"len_z = " << len_z << "\n";
 
-
-
-        pmlXN = V_PML_3D(plmLayerNumber,V_PML_2D(len_y, V_PML(len_z)));
-        pmlX  = V_PML_3D(plmLayerNumber,V_PML_2D(len_y, V_PML(len_z)));
-        pmlYN = V_PML_3D(len_x,V_PML_2D(plmLayerNumber, V_PML(len_z)));
-        pmlY  = V_PML_3D(len_x,V_PML_2D(plmLayerNumber, V_PML(len_z)));
-        pmlZN = V_PML_3D(len_x,V_PML_2D(len_y, V_PML(plmLayerNumber)));
-        pmlZ  = V_PML_3D(len_x,V_PML_2D(len_y, V_PML(plmLayerNumber)));
         
         initCoeffi();
+        #ifdef PML
+            #ifdef MUR
+                #error
+            #else
+                pmlSigmaStarE = VECTOR(plmLayerN);
+                pmlSigmaStarH = VECTOR(plmLayerN);
+                pmlExpSigmaStarE = VECTOR(plmLayerN,1);
+                pmlExpSigmaStarH = VECTOR(plmLayerN,1);
+
+                pmlXN = V_PML_3D(plmLayerN,V_PML_2D(len_y, V_PML(len_z)));
+                pmlX  = V_PML_3D(plmLayerN,V_PML_2D(len_y, V_PML(len_z)));
+                pmlYN = V_PML_3D(len_x,V_PML_2D(plmLayerN, V_PML(len_z)));
+                pmlY  = V_PML_3D(len_x,V_PML_2D(plmLayerN, V_PML(len_z)));
+                pmlZN = V_PML_3D(len_x,V_PML_2D(len_y, V_PML(plmLayerN)));
+                pmlZ  = V_PML_3D(len_x,V_PML_2D(len_y, V_PML(plmLayerN)));
+
+                pmlXNYN =  V_PML_3D(plmLayerN,V_PML_2D(plmLayerN, V_PML(len_z)));
+                pmlXYN =   V_PML_3D(plmLayerN,V_PML_2D(plmLayerN, V_PML(len_z)));
+                pmlXNY =   V_PML_3D(plmLayerN,V_PML_2D(plmLayerN, V_PML(len_z)));
+                pmlXY =    V_PML_3D(plmLayerN,V_PML_2D(plmLayerN, V_PML(len_z)));
+
+                pmlZNYN =  V_PML_3D(len_x,V_PML_2D(plmLayerN, V_PML(plmLayerN)));
+                pmlZYN =   V_PML_3D(len_x,V_PML_2D(plmLayerN, V_PML(plmLayerN)));
+                pmlZNY =   V_PML_3D(len_x,V_PML_2D(plmLayerN, V_PML(plmLayerN)));
+                pmlZY =    V_PML_3D(len_x,V_PML_2D(plmLayerN, V_PML(plmLayerN)));
+
+                pmlZNXN =  V_PML_3D(plmLayerN,V_PML_2D(len_y, V_PML(plmLayerN)));
+                pmlZXN =   V_PML_3D(plmLayerN,V_PML_2D(len_y, V_PML(plmLayerN)));
+                pmlZNX =   V_PML_3D(plmLayerN,V_PML_2D(len_y, V_PML(plmLayerN)));
+                pmlZX =    V_PML_3D(plmLayerN,V_PML_2D(len_y, V_PML(plmLayerN)));
+
+                pmlXYZ  =  V_PML_3D(plmLayerN,V_PML_2D(plmLayerN, V_PML(plmLayerN)));
+                pmlXNYZ  =  V_PML_3D(plmLayerN,V_PML_2D(plmLayerN, V_PML(plmLayerN)));
+                pmlXYZN  =  V_PML_3D(plmLayerN,V_PML_2D(plmLayerN, V_PML(plmLayerN)));
+                pmlXYNZ  =  V_PML_3D(plmLayerN,V_PML_2D(plmLayerN, V_PML(plmLayerN)));
+                pmlXNYZN  =  V_PML_3D(plmLayerN,V_PML_2D(plmLayerN, V_PML(plmLayerN)));
+                pmlXYNZN  =  V_PML_3D(plmLayerN,V_PML_2D(plmLayerN, V_PML(plmLayerN)));
+                pmlXNYNZ  =  V_PML_3D(plmLayerN,V_PML_2D(plmLayerN, V_PML(plmLayerN)));
+                pmlXNYNZN  =  V_PML_3D(plmLayerN,V_PML_2D(plmLayerN, V_PML(plmLayerN)));
+                InitPML();
+            #endif    
+        #endif
     }
     void update(float time);
     void initCoeffi();
@@ -240,6 +274,10 @@ public:
     void PML_H();
     void InitPML();
     float GetSigma(float D, float dStep, float pmlG, float pmlR,int N);
+    void GetBorderValuesPML();
+    void SetBorderValuesPML();
+
+
 
     //подсчет граней
     void PML_UpdateEXN();
@@ -249,31 +287,31 @@ public:
     void PML_UpdateEZN();
     void PML_UpdateEZ();
     //подсчет ребер
-    // void PML_UpdateEXNYN();
-    // void PML_UpdateEXYN();
-    // void PML_UpdateEXNY();
-    // void PML_UpdateEXY();
+    void PML_UpdateEXNYN();
+    void PML_UpdateEXYN();
+    void PML_UpdateEXNY();
+    void PML_UpdateEXY();
 
-    // void PML_UpdateEZNYN();
-    // void PML_UpdateEZYN();
-    // void PML_UpdateEZNY();
-    // void PML_UpdateEZY();
+    void PML_UpdateEZNYN();
+    void PML_UpdateEZYN();
+    void PML_UpdateEZNY();
+    void PML_UpdateEZY();
 
-    // void PML_UpdateEZNXN();
-    // void PML_UpdateEZXN();
-    // void PML_UpdateEZNX();
-    // void PML_UpdateEZX();
+    void PML_UpdateEZNXN();
+    void PML_UpdateEZXN();
+    void PML_UpdateEZNX();
+    void PML_UpdateEZX();
 
-    // // подсчет углов
-    // void PML_UpdateEXYZ();
-    // void PML_UpdateEXNYZ();
-    // void PML_UpdateEXYZN();
-    // void PML_UpdateEXYNZ();
+    // подсчет углов
+    void PML_UpdateEXYZ();
+    void PML_UpdateEXNYZ();
+    void PML_UpdateEXYZN();
+    void PML_UpdateEXYNZ();
 
-    // void PML_UpdateEXNYZN();
-    // void PML_UpdateEXYNZN();
-    // void PML_UpdateEXNYNZ();
-    // void PML_UpdateEXNYNZN();
+    void PML_UpdateEXNYZN();
+    void PML_UpdateEXYNZN();
+    void PML_UpdateEXNYNZ();
+    void PML_UpdateEXNYNZN();
 
     //подсчет граней
     void PML_UpdateHXN();
@@ -283,29 +321,29 @@ public:
     void PML_UpdateHZN();
     void PML_UpdateHZ();
     //подсчет ребер
-    // void PML_UpdateHXNYN();
-    // void PML_UpdateHXYN();
-    // void PML_UpdateHXNY();
-    // void PML_UpdateHXY();
+    void PML_UpdateHXNYN();
+    void PML_UpdateHXYN();
+    void PML_UpdateHXNY();
+    void PML_UpdateHXY();
 
-    // void PML_UpdateHZNYN();
-    // void PML_UpdateHZYN();
-    // void PML_UpdateHZNY();
-    // void PML_UpdateHZY();
+    void PML_UpdateHZNYN();
+    void PML_UpdateHZYN();
+    void PML_UpdateHZNY();
+    void PML_UpdateHZY();
 
-    // void PML_UpdateHZNXN();
-    // void PML_UpdateHZXN();
-    // void PML_UpdateHZNX();
-    // void PML_UpdateHZX();
+    void PML_UpdateHZNXN();
+    void PML_UpdateHZXN();
+    void PML_UpdateHZNX();
+    void PML_UpdateHZX();
 
-    // // подсчет углов
-    // void PML_UpdateHXYZ();
-    // void PML_UpdateHXNYZ();
-    // void PML_UpdateHXYZN();
-    // void PML_UpdateHXYNZ();
+    // подсчет углов
+    void PML_UpdateHXYZ();
+    void PML_UpdateHXNYZ();
+    void PML_UpdateHXYZN();
+    void PML_UpdateHXYNZ();
 
-    // void PML_UpdateHXNYZN();
-    // void PML_UpdateHXYNZN();
-    // void PML_UpdateHXNYNZ();
-    // void PML_UpdateHXNYNZN();
+    void PML_UpdateHXNYZN();
+    void PML_UpdateHXYNZN();
+    void PML_UpdateHXNYNZ();
+    void PML_UpdateHXNYNZN();
 };

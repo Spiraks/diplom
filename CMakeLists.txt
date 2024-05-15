@@ -14,7 +14,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -foffload=nvptx-none")
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-offload")
 
-add_executable(3D src/3D.cpp src/FDTD.cpp src/Mur.cpp src/PML_H.cpp src/PML_E.cpp src/PML.cpp)
+add_executable(3D src/3D.cpp src/FDTD.cpp src/Mur.cpp )
+# src/PML_H.cpp src/PML_E.cpp src/PML.cpp
 # if(OpenMP_CXX_FOUND)
 #     target_link_libraries(3D PUBLIC OpenMP::OpenMP_CXX)
 # endif()

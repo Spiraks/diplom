@@ -1,7 +1,6 @@
 
 #include "FDTD.h"
 #include <cmath>
-// #include "omp.h"
 
 float Field::gt(size_t x, size_t y, size_t z, size_t comp)
 {
@@ -18,27 +17,19 @@ void Field::copyNodes()
 
 void Field::setNode(size_t x, size_t y, size_t z, size_t comp, float value)
 {
+
     nodes[x][y][z][comp] = value;
 }
 
 void Field::updateE(Field &H, Field &J, Field &c1, Field &c2)
 {
 
-    float k = (dt / eps0);
-
-    // #pragma omp target teams distribute parallel for collapse(2) map(tofrom: H, J, c1,c2)
     for (size_t z = 2; z < len_z - 2; z++)
     {
         for (size_t y = 2; y < len_y - 2; y++)
         {
             for (size_t x = 2; x < len_x - 2; x++)
             {
-                // Не считаем обьект
-                // if (x > obj_x && x < obj_x + _obj_len_x)
-                //     if (y > obj_y && y < obj_y + _obj_len_y)
-                //         continue;
-                // if(x>len_x - 4 && z>len_z - 4 && y>len_y - 4)
-                // std::cout<<"Ex"<< x <<"-" << y << "-" << z<< "\n";
                 this->setNode(x + 1, y, z, X,
                               c1.gt(x + 1, y, z, X) * this->gt(x + 1, y, z, X) +
                                   c2.gt(x + 1, y, z, X) *
@@ -56,20 +47,12 @@ void Field::updateE(Field &H, Field &J, Field &c1, Field &c2)
 
 void Field::updateH(Field &E, Field &c0)
 {
-
-    // #pragma omp target teams distribute parallel for collapse(2) map(tofrom: E, c)
     for (size_t z = 2; z < len_z - 4; z++)
     {
         for (size_t y = 2; y < len_y - 4; y++)
         {
             for (size_t x = 2; x < len_x - 4; x++)
             {
-
-                // Не считаем обьект
-                // if (x > obj_x && x < obj_x + _obj_len_x)
-                //     if (y > obj_y && y < obj_y + _obj_len_y)
-                //         continue;
-
                 this->setNode(x, y + 1, z + 1, X, this->gt(x, y + 1, z + 1, X) + c0.gt(x, y + 1, z + 1, X) * ((E.gt(x, y + 1, z + 2, Y) - E.gt(x, y + 1, z, Y)) / dz - (E.gt(x, y + 2, z + 1, Z) - E.gt(x, y, z + 1, Z)) / dy));
 
                 this->setNode(x + 1, y, z + 1, Y, this->gt(x + 1, y, z + 1, Y) + c0.gt(x + 1, y, z + 1, Y) * ((E.gt(x + 2, y, z + 1, Z) - E.gt(x, y, z + 1, Z)) / dx - (E.gt(x + 1, y, z + 2, X) - E.gt(x + 1, y, z, X)) / dz));
@@ -244,8 +227,17 @@ void FDTD::update(float time)
         }
         GetBorderValuesMur();
 #endif
-        // (x1 - x2) ^ 2 + (y1 - y2) ^ 2;
 
+#ifdef PML
+    #ifdef MUR
+        #error
+    #else
+        std::cout << "PML\n";
+        SetBorderValuesPML();
+        Pml();
+        GetBorderValuesPML();
+    #endif    
+#endif
         _time += dt;
         std::cout << "time " << _time << "\n";
     }
@@ -262,7 +254,9 @@ void FDTD::initCoeffi()
                 for (size_t comp = X; comp <= Z; comp++)
                 {
                     c0.setNode(x, y, z, comp, dt / (Mu.gt(x, y, z, comp) * mu0));
+
                     c1.setNode(x, y, z, comp, ((Eps.gt(x, y, z, comp) * eps0) - (0.5 * Sigm.gt(x, y, z, comp) * dt)) / ((Eps.gt(x, y, z, comp) * eps0) + (0.5 * Sigm.gt(x, y, z, comp) * dt)));
+
                     c2.setNode(x, y, z, comp, dt / ((Eps.gt(x, y, z, comp) * eps0) + (0.5 * Sigm.gt(x, y, z, comp) * dt)));
                 }
             }

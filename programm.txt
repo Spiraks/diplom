@@ -8,8 +8,8 @@ figure ; streamslice(Ex, Ey);
 end;
 --------------------------------------------------------------------------------
 
-Ex = load("mur_Ezx.txt");
-Ey = load("mur_Ezy.txt");
+Ex = load("mur_Ezx0.txt");
+Ey = load("mur_Ezy0.txt");
 figure ; streamslice(Ex, Ey);
 ________________________________________________________________________________
 

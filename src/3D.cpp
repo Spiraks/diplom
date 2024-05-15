@@ -7,7 +7,6 @@
 #include <signal.h>
 #include <chrono>
 #include "FDTD.h"
-#include "Obj.h"
 
 int main(void)
 {
@@ -20,12 +19,10 @@ int main(void)
     std::string path = {"/home/alex/src/diplom_FDTD/"};
 
     Mesh3D mesh{_x, _y, _z};
-    // Obj obj(75, 75, 1, 50, 50, 18);
-    Obj obj(0, 0, 0, 0, 0, 0);
-    FDTD grid(mesh, obj);
+    FDTD grid(mesh);
 
     float j = 1;
-    int tick = 180;
+    int tick = 200;
     int step = 5;
     std::string name = ".txt";
     auto start = std::chrono::system_clock::now();
@@ -43,23 +40,23 @@ int main(void)
     grid.H.saveExToFileZ(path + "mur_Ezx0" + name, X);
     grid.H.saveExToFileZ(path + "mur_Ezy0" + name, Y);
 
-    size_t num = 1;
-    for (size_t i = 0; i < 30; i++)
-    {
-        for (size_t z = 0; z < _z; z++)
-        {
-            grid.J.setNode(px1, py1, z, X, 1);
-            grid.J.setNode(px1, py1, z, Y, 1);
-            grid.J.setNode(px1, py1, z, Z, 1);
-        }
-        grid.update(dt);
-        if (i % step == 0)
-        {
-            grid.H.saveExToFileZ(path + "mur_Ezx" + std::to_string(num) + name, X);
-            grid.H.saveExToFileZ(path + "mur_Ezy" + std::to_string(num) + name, Y);
-            num++;
-        }
-    }
+    // size_t num = 1;
+    // for (size_t i = 0; i < 150; i++)
+    // {
+    //     for (size_t z = 0; z < _z; z++)
+    //     {
+    //         grid.J.setNode(px1, py1, z, X, 1);
+    //         grid.J.setNode(px1, py1, z, Y, 1);
+    //         grid.J.setNode(px1, py1, z, Z, 1);
+    //     }
+    //     grid.update(dt);
+    //     if (i % step == 0)
+    //     {
+    //         grid.H.saveExToFileZ(path + "mur_Ezx" + std::to_string(num) + name, X);
+    //         grid.H.saveExToFileZ(path + "mur_Ezy" + std::to_string(num) + name, Y);
+    //         num++;
+    //     }
+    // }
     auto end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
     std::cout << "elapsed time: " << elapsed_seconds.count() << "s"
