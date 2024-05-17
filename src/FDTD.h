@@ -8,7 +8,7 @@
 #define Y 1
 #define Z 2
 // #define MUR
-// #define PML
+#define PML
 
 #define VECTOR std::vector<float>
 #define VECTOR_2D std::vector<VECTOR>
@@ -48,6 +48,31 @@ struct Mesh3D
 class Field
 {
 public:
+    VECTOR_3D _X;
+    VECTOR_3D _Y;
+    VECTOR_3D _Z;
+
+    //for mur
+    VECTOR_3D _X_1;
+    VECTOR_3D _Y_1;
+    VECTOR_3D _Z_1;
+
+    void updateE(Field &H, Field &J, VECTOR_3D &AE, VECTOR_3D &BE);
+    void updateH(Field &E, VECTOR_3D &AH);
+
+    void saveExToFileZX(const std::string &filename);
+    void saveExToFileZY(const std::string &filename);
+
+    void saveExToFileYX(const std::string &filename);
+    void saveExToFileYZ(const std::string &filename);
+
+    void saveExToFileXY(const std::string &filename);
+    void saveExToFileXZ(const std::string &filename);
+
+    void saveGraphZX(const std::string &filename);
+    void saveRangeY();
+
+    void copyNodes();
     Field() {}
     Field(Mesh3D &mesh, float value = 0)
     {
@@ -55,86 +80,33 @@ public:
         len_y = mesh.len_y;
         len_z = mesh.len_z;
         this->_value = value;
-        nodes = VECTOR_4D(len_x, VECTOR_3D(len_y, VECTOR_2D(len_z, VECTOR(3, _value))));
-        nodes_1 = VECTOR_4D(len_x, VECTOR_3D(len_y, VECTOR_2D(len_z, VECTOR(3, _value))));
+        _X = VECTOR_3D(len_x, VECTOR_2D(len_y, VECTOR(len_z, _value)));
+        _Y = VECTOR_3D(len_x, VECTOR_2D(len_y, VECTOR(len_z, _value)));
+        _Z = VECTOR_3D(len_x, VECTOR_2D(len_y, VECTOR(len_z, _value)));
+
+        _X_1 = VECTOR_3D(len_x, VECTOR_2D(len_y, VECTOR(len_z, _value)));
+        _Y_1 = VECTOR_3D(len_x, VECTOR_2D(len_y, VECTOR(len_z, _value)));
+        _Z_1 = VECTOR_3D(len_x, VECTOR_2D(len_y, VECTOR(len_z, _value)));
+
     }
 
-    float gt(size_t x, size_t y, size_t z, size_t comp);
-    void setNode(size_t x, size_t y, size_t z, size_t comp, float value);
-    float gtO(size_t x, size_t y, size_t z, size_t comp);
-
-    void updateE(Field &H, Field &J, Field &c1, Field &c2);
-    void updateH(Field &E, Field &c0);
-
-    void saveExToFileZ(const std::string &filename, int comp);
-    void saveExToFileX(const std::string &filename, int comp);
-    void saveExToFileY(const std::string &filename, int comp);
-    void saveToFile(const std::string &filename);
-
-    void saveGraphZ(const std::string &filename, int comp);
-    void saveRangeY();
-
-    void copyNodes();
-
-    size_t getSizeX()
-    {
-        return len_x;
-    }
-    size_t getSizeY()
-    {
-        return len_y;
-    }
-    size_t getSizeZ()
-    {
-        return len_z;
-    }
-    float getMinX() const
-    {
-        return min_x;
-    }
-    float getMinY() const
-    {
-        return min_y;
-    }
-    float getMinZ() const
-    {
-        return min_z;
-    }
-    float getMaxX() const
-    {
-        return max_x;
-    }
-    float getMaxY() const
-    {
-        return max_y;
-    }
-    float getMaxZ() const
-    {
-        return max_z;
-    }
+    
 
 private:
     int len_x = 0;
     int len_y = 0;
     int len_z = 0;
     float _value = 0;
-    float min_x = 0;
-    float min_y = 0;
-    float min_z = 0;
-    float max_x = 0;
-    float max_y = 0;
-    float max_z = 0;
-    VECTOR_4D nodes;
-    //for mur
-    VECTOR_4D nodes_1;
+
+
 };
 
 class FDTD
 {
 private:
-    Field c0;
-    Field c1;
-    Field c2;
+    VECTOR_3D AE;
+    VECTOR_3D BE;
+    VECTOR_3D AH;
     float _time = 0;
     int len_x = 0;
     int len_y = 0;
@@ -210,16 +182,20 @@ public:
         Sigm = Field(mesh, 2.0e-5); // 2 -14
         Eps = Field(mesh, 1.00057);  // 1.00057
         Mu = Field(mesh, 0.999991);  // 0.999991
-        c0 = Field(mesh);
-        c1 = Field(mesh);
-        c2 = Field(mesh);
         len_x = mesh.len_x;
         len_y = mesh.len_y;
         len_z = mesh.len_z;
+        AH = VECTOR_3D(len_x, VECTOR_2D(len_y, VECTOR(len_z)));
+        AE = VECTOR_3D(len_x, VECTOR_2D(len_y, VECTOR(len_z)));
+        BE = VECTOR_3D(len_x, VECTOR_2D(len_y, VECTOR(len_z)));
+
+        
+
         std::cout << "SIZE FIELD: \n" << "len_x = " << len_x << "\n"<<"len_y = " << len_y << "\n" <<"len_z = " << len_z << "\n";
 
         
         initCoeffi();
+        std::cout << "INIT\n";
         #ifdef PML
             #ifdef MUR
                 #error

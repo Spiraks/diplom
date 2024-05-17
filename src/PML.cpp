@@ -1,7 +1,7 @@
 #include <vector>
 #include <cmath>
 #include "FDTD.h"
-
+#ifdef PML
 float FDTD::GetSigma(float D, float dStep, float pmlG, float pmlR,int N) {
     return -(eps0 * c) / (2 * dStep) * log(pmlG) / (pow(pmlG, N) - 1) * log(pmlR) * pow(pmlG, D / dStep);
 }
@@ -16,22 +16,22 @@ void FDTD::InitPML()
     std::cout << "INIT PML\n";
     for (size_t K = 0; K < plmLayerN; ++K) {
         float sigma = this->GetSigma(K*dx,dx,2.15,0.001,K);
-        pmlSigmaStarE[K] = (1-0,5 * sigma *dt)/ (1+0,5 *sigma *dt);
+        pmlSigmaStarE[K] = 1;
         float sigma_s =(sigma *mu0)/eps0;
         std::cout << "sigma " <<sigma<< " | sigma_s " <<sigma_s<<" | "<<K<<"\n";
-        pmlSigmaStarH[K] = (1-0,5 * sigma_s *dt)/ (1+0,5 *sigma_s *dt);
-        pmlExpSigmaStarE[K] = dt/(1 + 0,5 * sigma * dt)/dx;
-        pmlExpSigmaStarH[K] = dt/(1 + 0,5 * sigma_s * dt)/dx;
+        pmlSigmaStarH[K] = 1;
+        pmlExpSigmaStarE[K] = 1;
+        pmlExpSigmaStarH[K] = 1;
     }
 }
 
 #define setPML(x, y, z, x1, y1, z1, mass) ({ \
-    mass[x][y][z].Hzy = H.gt(x1,y1,z1,Z)/2;\
-    mass[x][y][z].Hxz = H.gt(x1,y1,z1,X)/2;\
-    mass[x][y][z].Hyz = H.gt(x1,y1,z1,Y)/2;\
-    mass[x][y][z].Ezy = E.gt(x1,y1,z1,Z)/2;\
-    mass[x][y][z].Exz = E.gt(x1,y1,z1,X)/2;\
-    mass[x][y][z].Eyz = E.gt(x1,y1,z1,Y)/2;\
+    mass[x][y][z].Hzy = H._Z[x1][y1][z1]/2;\
+    mass[x][y][z].Hxz = H._X[x1][y1][z1]/2;\
+    mass[x][y][z].Hyz = H._Y[x1][y1][z1]/2;\
+    mass[x][y][z].Ezy = E._Z[x1][y1][z1]/2;\
+    mass[x][y][z].Exz = E._X[x1][y1][z1]/2;\
+    mass[x][y][z].Eyz = E._Y[x1][y1][z1]/2;\
     mass[x][y][z].Hzx = mass[x][y][z].Hzy;\
     mass[x][y][z].Hxy = mass[x][y][z].Hxz;\
     mass[x][y][z].Hyx = mass[x][y][z].Hyz;\
@@ -40,25 +40,20 @@ void FDTD::InitPML()
     mass[x][y][z].Eyx = mass[x][y][z].Eyz; })
 
 #define getPML(x, y, z, x1, y1, z1, mass) ({ \
-    H.setNode(x1,y1,z1,Z,mass[x][y][z].Hzx + mass[x][y][z].Hzy);\
-    H.setNode(x1,y1,z1,X,mass[x][y][z].Hxy + mass[x][y][z].Hxz);\
-    H.setNode(x1,y1,z1,Y,mass[x][y][z].Hyx + mass[x][y][z].Hyz);\
-    E.setNode(x1,y1,z1,Z,mass[x][y][z].Ezx + mass[x][y][z].Ezy);\
-    E.setNode(x1,y1,z1,X,mass[x][y][z].Exy + mass[x][y][z].Exz);\
-    E.setNode(x1,y1,z1,Y,mass[x][y][z].Eyx + mass[x][y][z].Eyz); })
+    H._Z[x1][y1][z1] = mass[x][y][z].Hzx + mass[x][y][z].Hzy;\
+    H._X[x1][y1][z1] = mass[x][y][z].Hxy + mass[x][y][z].Hxz;\
+    H._Y[x1][y1][z1] = mass[x][y][z].Hyx + mass[x][y][z].Hyz;\
+    E._Z[x1][y1][z1] = mass[x][y][z].Ezx + mass[x][y][z].Ezy;\
+    E._X[x1][y1][z1] = mass[x][y][z].Exy + mass[x][y][z].Exz;\
+    E._Y[x1][y1][z1] = mass[x][y][z].Eyx + mass[x][y][z].Eyz; })
 
 void FDTD::SetBorderValuesPML(){
 
-    // std::cout << "Mur\n";
     size_t s = 1;
-    size_t s1 = s + 1;
-    size_t end = 2;
+    size_t end = 1;
     size_t x = len_x - end;
     size_t y = len_y - end;
     size_t z = len_z - end;
-    size_t x1 = len_x - end - 1;
-    size_t y1 = len_y - end - 1;
-    size_t z1 = len_z - end - 1;
     // ЛЕВАЯ И ПРАВАЯ ПЛОСКОСТИ
     //  Ez для двух плоскостей YxZ (левой и правой)
     // Ey для двух плоскостей YxZ [левой и правой]
@@ -141,14 +136,10 @@ void FDTD::GetBorderValuesPML(){
 
     // std::cout << "Mur\n";
     size_t s = 1;
-    size_t s1 = s + 1;
-    size_t end = 2;
+    size_t end = 1;
     size_t x = len_x - end;
     size_t y = len_y - end;
     size_t z = len_z - end;
-    size_t x1 = len_x - end - 1;
-    size_t y1 = len_y - end - 1;
-    size_t z1 = len_z - end - 1;
 
     // ЛЕВАЯ И ПРАВАЯ ПЛОСКОСТИ
     // Ez для двух плоскостей YxZ (левой и правой)
@@ -220,3 +211,4 @@ void FDTD::GetBorderValuesPML(){
         getPML(I, plmLayerNMinus1, plmLayerNMinus1, I, y, z,pmlZNYN);
     }
 }
+#endif

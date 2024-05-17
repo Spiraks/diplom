@@ -8,9 +8,17 @@ figure ; streamslice(Ex, Ey);
 end;
 --------------------------------------------------------------------------------
 
-Ex = load("mur_Ezx0.txt");
-Ey = load("mur_Ezy0.txt");
-figure ; streamslice(Ex, Ey);
+Exy = load("mur_Exy.txt");
+Exz = load("mur_Exz.txt");
+figure ; streamslice(Exz, Exy);
+
+Eyx = load("mur_Eyx.txt");
+Eyz = load("mur_Eyz.txt");
+figure ; streamslice(Eyz, Eyx);
+
+Ezx = load("mur_Ezx.txt");
+Ezy = load("mur_Ezy.txt");
+figure ; streamslice(Ezx, Ezy);
 ________________________________________________________________________________
 
 num_frames = 1; % количество кадров

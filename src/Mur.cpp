@@ -2,53 +2,24 @@
 #include <vector>
 #include "FDTD.h"
 
-#define _murE(x, y, z, x1, y1, z1, cf, axis) ({ E.setNode(x, y, z, axis,                                          \
-                                                          (E.gtO(x1, y1, z1, axis) + cf * (E.gtO(x, y, z, axis) - \
-                                                                                           E.gt(x1, y1, z1, axis)))); })
+#define _murX(x, y, z, x1, y1, z1, cf,fiels) ({ \
+fiels._X[x][y][z] = (fiels._X_1[x1][y1][z1] + cf * (fiels._X_1[x][y][z] - fiels._X[x1][y1][z1])); })
 
-#define _murH(x, y, z, x1, y1, z1, cf, axis) ({ H.setNode(x, y, z, axis,                                          \
-                                                          (H.gtO(x1, y1, z1, axis) + cf * (H.gtO(x, y, z, axis) - \
-                                                                                           H.gt(x1, y1, z1, axis)))); })
+#define _murY(x, y, z, x1, y1, z1, cf,fiels) ({ \
+fiels._Y[x][y][z] = (fiels._Y_1[x1][y1][z1] + cf * (fiels._Y_1[x][y][z] - fiels._Y[x1][y1][z1])); })
 
-#define murH(x, y, z, x1, y1, z1, cf) ({ \
-_murH(x, y, z, x1, y1, z1, cf, X);\
-_murH(x, y, z, x1, y1, z1, cf, Y);\
-_murH(x, y, z, x1, y1, z1, cf, Z); })
-
-#define murE(x, y, z, x1, y1, z1, cf) ({ \
-_murE(x, y, z, x1, y1, z1, cf, X);\
-_murE(x, y, z, x1, y1, z1, cf, Y);\
-_murE(x, y, z, x1, y1, z1, cf, Z); })
+#define _murZ(x, y, z, x1, y1, z1, cf,fiels) ({ \
+fiels._Z[x][y][z] = (fiels._Z_1[x1][y1][z1] + cf * (fiels._Z_1[x][y][z] - fiels._Z[x1][y1][z1])); })
 
 
-
-#define _minus() ({\
-    s++;\
-    s1++;\
-    x--;\
-    x1--;\
-    y--;\
-    y1--;\
-    z--;\
-    z1--; })
-
-#define _plus() ({\
-    s--;\
-    s1--;\
-    x++;\
-    x1++;\
-    y++;\
-    y1++;\
-    z++;\
-    z1++; })
 
 #define mur(x, y, z, x1, y1, z1, cf) ({ \
-_murE(x, y, z, x1, y1, z1, cf, X);\
-_murE(x, y, z, x1, y1, z1, cf, Y);\
-_murE(x, y, z, x1, y1, z1, cf, Z);\
-_murH(x, y, z, x1, y1, z1, cf, X);\
-_murH(x, y, z, x1, y1, z1, cf, Y);\
-_murH(x, y, z, x1, y1, z1, cf, Z); })
+_murX(x, y, z, x1, y1, z1, cf, H);\
+_murY(x, y, z, x1, y1, z1, cf, H);\
+_murZ(x, y, z, x1, y1, z1, cf, H);\
+_murX(x, y, z, x1, y1, z1, cf, E);\
+_murY(x, y, z, x1, y1, z1, cf, E);\
+_murZ(x, y, z, x1, y1, z1, cf, E); })
 
 void FDTD::Mur()
 {

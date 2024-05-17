@@ -1,5 +1,5 @@
 #include "FDTD.h"
-
+#ifdef PML
 void FDTD::PML_H(){
 
     //подсчет граней
@@ -1267,3 +1267,4 @@ void FDTD::PML_UpdateHXN() {
         }
     }
 }
+#endif

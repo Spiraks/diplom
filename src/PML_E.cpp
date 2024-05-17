@@ -1,5 +1,5 @@
 #include "FDTD.h"
-
+#ifdef PML
 #define _EYX(mass,x, y, z, _s1, _s2) ({ \
     mass[x][y][z].Eyx =_s1 * mass[x][y][z].Eyx + _s2 * \
     (mass[x + 1][y][z].Hzx + mass[x + 1][y][z].Hzy \
@@ -1304,3 +1304,4 @@ void FDTD::PML_UpdateEXN() {
         }
     }
 }
+#endif

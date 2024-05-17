@@ -16,13 +16,13 @@ int main(void)
     int _z = size;
     int px1 = _x / 2;
     int py1 = _y / 2;
-    std::string path = {"/home/alex/src/diplom_FDTD/"};
+    std::string path = {"/home/alex/src/diplom_FDTD/results/"};
 
     Mesh3D mesh{_x, _y, _z};
     FDTD grid(mesh);
 
-    float j = 1;
-    int tick = 200;
+    float j = -1;
+    int tick = 590;
     int step = 5;
     std::string name = ".txt";
     auto start = std::chrono::system_clock::now();
@@ -31,14 +31,18 @@ int main(void)
     {
         for (size_t z = 0; z < _z; z++)
         {
-            grid.J.setNode(px1, py1, z, X, 1);
-            grid.J.setNode(px1, py1, z, Y, 1);
-            grid.J.setNode(px1, py1, z, Z, 1);
+            grid.J._X[px1][py1][z]= j;
+            grid.J._Y[px1][py1][z]= j;
+            grid.J._Z[px1][py1][z]= j;
         }
         grid.update(dt);
     }
-    grid.H.saveExToFileZ(path + "mur_Ezx0" + name, X);
-    grid.H.saveExToFileZ(path + "mur_Ezy0" + name, Y);
+    grid.H.saveExToFileZX(path + "mur_Ezx" + name);
+    grid.H.saveExToFileZY(path + "mur_Ezy" + name);
+    grid.H.saveExToFileXY(path + "mur_Exy" + name);
+    grid.H.saveExToFileXZ(path + "mur_Exz" + name);
+    grid.H.saveExToFileYX(path + "mur_Eyx" + name);
+    grid.H.saveExToFileYZ(path + "mur_Eyz" + name);
 
     // size_t num = 1;
     // for (size_t i = 0; i < 150; i++)
