@@ -1,7 +1,7 @@
 
 #include <vector>
 #include "FDTD.h"
-
+#ifdef MUR
 #define _murX(x, y, z, x1, y1, z1, cf,fiels) ({ \
 fiels._X[x][y][z] = (fiels._X_1[x1][y1][z1] + cf * (fiels._X_1[x][y][z] - fiels._X[x1][y1][z1])); })
 
@@ -116,3 +116,5 @@ void FDTD::GetBorderValuesMur()
     E.copyNodes();
     H.copyNodes();
 }
+
+#endif //MUR

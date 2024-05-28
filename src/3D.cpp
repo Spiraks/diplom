@@ -8,33 +8,61 @@
 #include <chrono>
 #include "FDTD.h"
 
+#define setPoint(x,y,z)({ \
+            grid.J._X[x][y][z]= j;\
+            grid.J._Y[x][y][z]= j;\
+            grid.J._Z[x][y][z]= j;})
+#define setBase(x,y,z) ({\
+            grid.Sigm._X[x][y][z]= 0;\
+            grid.Sigm._Y[x][y][z]= 0;\
+            grid.Sigm._Z[x][y][z]= 0;\
+            grid.Mu._X[x][y][z]= 1;\
+            grid.Mu._Y[x][y][z]= 1;\
+            grid.Mu._Z[x][y][z]= 1;\
+            grid.Eps._X[x][y][z]= 4;\
+            grid.Eps._Y[x][y][z]= 4;\
+            grid.Eps._Z[x][y][z]= 4;})
+#define setPlot(x,y,z) ({\
+            grid.Sigm._X[x][y][z]= 1000000;\
+            grid.Sigm._Y[x][y][z]= 1000000;\
+            grid.Sigm._Z[x][y][z]= 1000000;\
+            grid.Mu._X[x][y][z]= 1;\
+            grid.Mu._Y[x][y][z]= 1;\
+            grid.Mu._Z[x][y][z]= 1;\
+            grid.Eps._X[x][y][z]= 1;\
+            grid.Eps._Y[x][y][z]= 1;\
+            grid.Eps._Z[x][y][z]= 1;})
+
 int main(void)
 {
-    int size = 71;
-    int _x = size;
-    int _y = size;
-    int _z = size;
+    int size = 150;
+    int _x = 160;
+    int _y = 160;
+    int _z = 300;
     int px1 = _x / 2;
     int py1 = _y / 2;
     std::string path = {"/home/alex/src/diplom_FDTD/results/"};
+
 
     Mesh3D mesh{_x, _y, _z};
     FDTD grid(mesh);
 
     float j = -1;
-    int tick = 590;
+    int tick = 300; //60
     int step = 5;
     std::string name = ".txt";
     auto start = std::chrono::system_clock::now();
 
     for (size_t i = 0; i < tick; i++)
     {
-        for (size_t z = 0; z < _z; z++)
-        {
-            grid.J._X[px1][py1][z]= j;
-            grid.J._Y[px1][py1][z]= j;
-            grid.J._Z[px1][py1][z]= j;
+
+        for(int a = 0; a < 18; a++){
+            for(int b = 0; b < 18; b++){
+                setPoint(px1-9+a,py1-9+b,50);
+                setPoint(px1-9+a,py1-9+b,51);
+            }
         }
+        
         grid.update(dt);
     }
     grid.H.saveExToFileZX(path + "mur_Ezx" + name);

@@ -134,9 +134,9 @@ void FDTD::PML_E(){
 void FDTD::PML_UpdateEXYZ() {
     size_t I, J, K;
 
-    I = plmLayerNMinus1;
-    J = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    I = plmLayerN1;
+    J = plmLayerN1;
+    K = plmLayerN1;
     _0EZX(pmlXYZ,I,J,K,pmlSigmaStarE[I],pmlExpSigmaStarE[I]);
     _0EYX(pmlXYZ,I,J,K,pmlSigmaStarE[I],pmlExpSigmaStarE[I]);
     _0EXY(pmlXYZ,I,J,K,pmlSigmaStarE[I],pmlExpSigmaStarE[I]);
@@ -145,9 +145,9 @@ void FDTD::PML_UpdateEXYZ() {
     _0EXZ(pmlXYZ,I,J,K,pmlSigmaStarE[I],pmlExpSigmaStarE[I]);
 
 
-    for (I = 0; I < plmLayerNMinus2; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+    for (I = 0; I < plmLayerN2; ++I) {
+        for (J = 0; J < plmLayerN2; ++J) {
+            for (K = 0; K < plmLayerN2; ++K) {
     // Hyz
     // std::cout << "Hxz\n";  
                 _EYZ(pmlXYZ,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -168,9 +168,9 @@ void FDTD::PML_UpdateEXYZ() {
 void FDTD::PML_UpdateEXNYZ() {
     size_t I, J, K;
 
-    I = plmLayerNMinus1;
-    J = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    I = plmLayerN1;
+    J = plmLayerN1;
+    K = plmLayerN1;
     _0EZX(pmlXNYZ,I,J,K,pmlSigmaStarE[I],pmlExpSigmaStarE[I]);
     _0EYX(pmlXNYZ,I,J,K,pmlSigmaStarE[I],pmlExpSigmaStarE[I]);
 
@@ -181,9 +181,9 @@ void FDTD::PML_UpdateEXNYZ() {
     _0EXZ(pmlXNYZ,I,J,K,pmlSigmaStarE[I],pmlExpSigmaStarE[I]);
 
 
-    for (I = 0; I < plmLayerNMinus2; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+    for (I = 0; I < plmLayerN2; ++I) {
+        for (J = 0; J < plmLayerN2; ++J) {
+            for (K = 0; K < plmLayerN2; ++K) {
     // Hyz
     //std::cout << "Hxz\n";  
                 _EYZ(pmlXNYZ,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -204,9 +204,9 @@ void FDTD::PML_UpdateEXNYZ() {
 void FDTD::PML_UpdateEXYNZ() {
     size_t I, J, K;
 
-    I = plmLayerNMinus1;
-    J = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    I = plmLayerN1;
+    J = plmLayerN1;
+    K = plmLayerN1;
     _0EZX(pmlXYNZ,I,J,K,pmlSigmaStarE[I],pmlExpSigmaStarE[I]);
     _0EYX(pmlXYNZ,I,J,K,pmlSigmaStarE[I],pmlExpSigmaStarE[I]);
 
@@ -217,9 +217,9 @@ void FDTD::PML_UpdateEXYNZ() {
     _0EXZ(pmlXYNZ,I,J,K,pmlSigmaStarE[I],pmlExpSigmaStarE[I]);
 
 
-    for (I = 0; I < plmLayerNMinus2; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+    for (I = 0; I < plmLayerN2; ++I) {
+        for (J = 0; J < plmLayerN2; ++J) {
+            for (K = 0; K < plmLayerN2; ++K) {
     // Hyz
     //std::cout << "Hxz\n";  
                 _EYZ(pmlXYNZ,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -240,9 +240,9 @@ void FDTD::PML_UpdateEXYNZ() {
 void FDTD::PML_UpdateEXYZN() {
         size_t I, J, K;
 
-    I = plmLayerNMinus1;
-    J = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    I = plmLayerN1;
+    J = plmLayerN1;
+    K = plmLayerN1;
     _0EZX(pmlXYZN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
     _0EYX(pmlXYZN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
 
@@ -253,9 +253,9 @@ void FDTD::PML_UpdateEXYZN() {
     _0EXZ(pmlXYZN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
 
 
-    for (I = 0; I < plmLayerNMinus2; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+    for (I = 0; I < plmLayerN2; ++I) {
+        for (J = 0; J < plmLayerN2; ++J) {
+            for (K = 0; K < plmLayerN2; ++K) {
     // Hyz
     //std::cout << "Hxz\n";  
                 _EYZ(pmlXYZN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -276,9 +276,9 @@ void FDTD::PML_UpdateEXYZN() {
 void FDTD::PML_UpdateEXNYNZ() {
         size_t I, J, K;
 
-    I = plmLayerNMinus1;
-    J = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    I = plmLayerN1;
+    J = plmLayerN1;
+    K = plmLayerN1;
     _0EZX(pmlXNYNZ,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
     _0EYX(pmlXNYNZ,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
 
@@ -289,9 +289,9 @@ void FDTD::PML_UpdateEXNYNZ() {
     _0EXZ(pmlXNYNZ,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
 
 
-    for (I = 0; I < plmLayerNMinus2; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+    for (I = 0; I < plmLayerN2; ++I) {
+        for (J = 0; J < plmLayerN2; ++J) {
+            for (K = 0; K < plmLayerN2; ++K) {
     // Hyz
     //std::cout << "Hxz\n";  
                 _EYZ(pmlXNYNZ,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -312,9 +312,9 @@ void FDTD::PML_UpdateEXNYNZ() {
 void FDTD::PML_UpdateEXNYZN() {
         size_t I, J, K;
 
-    I = plmLayerNMinus1;
-    J = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    I = plmLayerN1;
+    J = plmLayerN1;
+    K = plmLayerN1;
     _0EZX(pmlXNYZN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
     _0EYX(pmlXNYZN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
 
@@ -325,9 +325,9 @@ void FDTD::PML_UpdateEXNYZN() {
     _0EXZ(pmlXNYZN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
 
 
-    for (I = 0; I < plmLayerNMinus2; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+    for (I = 0; I < plmLayerN2; ++I) {
+        for (J = 0; J < plmLayerN2; ++J) {
+            for (K = 0; K < plmLayerN2; ++K) {
     // Hyz
     //std::cout << "Hxz\n";  
                 _EYZ(pmlXNYZN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -348,9 +348,9 @@ void FDTD::PML_UpdateEXNYZN() {
 void FDTD::PML_UpdateEXYNZN() {
         size_t I, J, K;
 
-    I = plmLayerNMinus1;
-    J = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    I = plmLayerN1;
+    J = plmLayerN1;
+    K = plmLayerN1;
     _0EZX(pmlXYNZN,I,J,K,pmlSigmaStarE[I],pmlExpSigmaStarE[I]);
     _0EYX(pmlXYNZN,I,J,K,pmlSigmaStarE[I],pmlExpSigmaStarE[I]);
 
@@ -361,9 +361,9 @@ void FDTD::PML_UpdateEXYNZN() {
     _0EXZ(pmlXYNZN,I,J,K,pmlSigmaStarE[I],pmlExpSigmaStarE[I]);
 
 
-    for (I = 0; I < plmLayerNMinus2; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+    for (I = 0; I < plmLayerN2; ++I) {
+        for (J = 0; J < plmLayerN2; ++J) {
+            for (K = 0; K < plmLayerN2; ++K) {
     // Hyz
     //std::cout << "Hxz\n";  
                 _EYZ(pmlXYNZN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -384,9 +384,9 @@ void FDTD::PML_UpdateEXYNZN() {
 void FDTD::PML_UpdateEXNYNZN() {
         size_t I, J, K;
 
-    I = plmLayerNMinus1;
-    J = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    I = plmLayerN1;
+    J = plmLayerN1;
+    K = plmLayerN1;
     _0EZX(pmlXNYNZN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
     _0EYX(pmlXNYNZN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
 
@@ -397,9 +397,9 @@ void FDTD::PML_UpdateEXNYNZN() {
     _0EXZ(pmlXNYNZN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
 
 
-    for (I = 0; I < plmLayerNMinus2; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+    for (I = 0; I < plmLayerN2; ++I) {
+        for (J = 0; J < plmLayerN2; ++J) {
+            for (K = 0; K < plmLayerN2; ++K) {
     // Hyz
     //std::cout << "Hxz\n";  
                 _EYZ(pmlXNYNZN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -423,8 +423,8 @@ void FDTD::PML_UpdateEXNYN() {
 
     // Hyz
     //std::cout << "Hxz\n";  
-    for (I = 0; I < plmLayerNMinus1; ++I) {
-        for (J = 0; J < plmLayerNMinus1; ++J) {
+    for (I = 0; I < plmLayerN1; ++I) {
+        for (J = 0; J < plmLayerN1; ++J) {
             for (K = 0; K < len_z -1; ++K) {
                 _EYZ(pmlXNYN,I,J,K,1,pmlBHZ);
                 _EXZ(pmlXNYN,I,J,K,1,pmlBHZ);
@@ -434,8 +434,8 @@ void FDTD::PML_UpdateEXNYN() {
 
     // Hyx
     //std::cout << "Hzx\n";  
-    for (I = 0; I < plmLayerNMinus2; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
+    for (I = 0; I < plmLayerN2; ++I) {
+        for (J = 0; J < plmLayerN2; ++J) {
             for (K = 0; K < len_y; ++K) {
                 _EZX(pmlXNYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
                 _EYX(pmlXNYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -444,8 +444,8 @@ void FDTD::PML_UpdateEXNYN() {
         }
     }
 
-    I = plmLayerNMinus1;
-    J = plmLayerNMinus1;
+    I = plmLayerN1;
+    J = plmLayerN1;
     for (K = 0; K < len_z; ++K) {
         _0EZX(pmlXNYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
         _0EYX(pmlXNYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -453,8 +453,8 @@ void FDTD::PML_UpdateEXNYN() {
 
     // Hzy
     // Hxy
-    for (I = 0; I < plmLayerNMinus2; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
+    for (I = 0; I < plmLayerN2; ++I) {
+        for (J = 0; J < plmLayerN2; ++J) {
             for (K = 0; K < len_z; ++K) {
                 _EZY(pmlXNYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
                 _EXY(pmlXNYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -463,8 +463,8 @@ void FDTD::PML_UpdateEXNYN() {
         }
     }
 
-    I = plmLayerNMinus1;
-    J = plmLayerNMinus1;
+    I = plmLayerN1;
+    J = plmLayerN1;
     for (K = 0; K < len_z; ++K) {
         _0EZY(pmlXNYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
         _0EXY(pmlXNYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -475,8 +475,8 @@ void FDTD::PML_UpdateEXYN() {
 
     // Hyz
     //std::cout << "Hxz\n";  
-    for (I = 0; I < plmLayerNMinus1; ++I) {
-        for (J = 0; J < plmLayerNMinus1; ++J) {
+    for (I = 0; I < plmLayerN1; ++I) {
+        for (J = 0; J < plmLayerN1; ++J) {
             for (K = 0; K < len_z -1; ++K) {
                 _EYZ(pmlXYN,I,J,K,1,pmlBHZ);
                 _EXZ(pmlXYN,I,J,K,1,pmlBHZ);
@@ -486,8 +486,8 @@ void FDTD::PML_UpdateEXYN() {
 
     // Hyx
     //std::cout << "Hzx\n";  
-    for (I = 0; I < plmLayerNMinus2; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
+    for (I = 0; I < plmLayerN2; ++I) {
+        for (J = 0; J < plmLayerN2; ++J) {
             for (K = 0; K < len_y; ++K) {
                 _EZX(pmlXYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
                 _EYX(pmlXYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -496,8 +496,8 @@ void FDTD::PML_UpdateEXYN() {
         }
     }
 
-    I = plmLayerNMinus1;
-    J = plmLayerNMinus1;
+    I = plmLayerN1;
+    J = plmLayerN1;
     for (K = 0; K < len_z; ++K) {
         _0EZX(pmlXYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
         _0EYX(pmlXYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -505,8 +505,8 @@ void FDTD::PML_UpdateEXYN() {
 
     // Hzy
     // Hxy
-    for (I = 0; I < plmLayerNMinus2; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
+    for (I = 0; I < plmLayerN2; ++I) {
+        for (J = 0; J < plmLayerN2; ++J) {
             for (K = 0; K < len_z; ++K) {
                 _EZY(pmlXYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
                 _EXY(pmlXYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -515,8 +515,8 @@ void FDTD::PML_UpdateEXYN() {
         }
     }
 
-    I = plmLayerNMinus1;
-    J = plmLayerNMinus1;
+    I = plmLayerN1;
+    J = plmLayerN1;
     for (K = 0; K < len_z; ++K) {
         _0EZY(pmlXYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
         _0EXY(pmlXYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -527,8 +527,8 @@ void FDTD::PML_UpdateEXNY() {
 
     // Hyz
     //std::cout << "Hxz\n";  
-    for (I = 0; I < plmLayerNMinus1; ++I) {
-        for (J = 0; J < plmLayerNMinus1; ++J) {
+    for (I = 0; I < plmLayerN1; ++I) {
+        for (J = 0; J < plmLayerN1; ++J) {
             for (K = 0; K < len_z -1; ++K) {
                 _EYZ(pmlXNY,I,J,K,1,pmlBHZ);
                 _EXZ(pmlXNY,I,J,K,1,pmlBHZ);
@@ -538,8 +538,8 @@ void FDTD::PML_UpdateEXNY() {
 
     // Hyx
     //std::cout << "Hzx\n";  
-    for (I = 0; I < plmLayerNMinus2; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
+    for (I = 0; I < plmLayerN2; ++I) {
+        for (J = 0; J < plmLayerN2; ++J) {
             for (K = 0; K < len_y; ++K) {
                 _EZX(pmlXNY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
                 _EYX(pmlXNY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -548,8 +548,8 @@ void FDTD::PML_UpdateEXNY() {
         }
     }
 
-    I = plmLayerNMinus1;
-    J = plmLayerNMinus1;
+    I = plmLayerN1;
+    J = plmLayerN1;
     for (K = 0; K < len_z; ++K) {
         _0EZX(pmlXNY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
         _0EYX(pmlXNY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -557,8 +557,8 @@ void FDTD::PML_UpdateEXNY() {
 
     // Hzy
     // Hxy
-    for (I = 0; I < plmLayerNMinus2; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
+    for (I = 0; I < plmLayerN2; ++I) {
+        for (J = 0; J < plmLayerN2; ++J) {
             for (K = 0; K < len_z; ++K) {
                 _EZY(pmlXNY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
                 _EXY(pmlXNY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -567,8 +567,8 @@ void FDTD::PML_UpdateEXNY() {
         }
     }
 
-    I = plmLayerNMinus1;
-    J = plmLayerNMinus1;
+    I = plmLayerN1;
+    J = plmLayerN1;
     for (K = 0; K < len_z; ++K) {
         _0EZY(pmlXNY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
         _0EXY(pmlXNY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -579,8 +579,8 @@ void FDTD::PML_UpdateEXY() {
 
     // Hyz
     //std::cout << "Hxz\n";  
-    for (I = 0; I < plmLayerNMinus1; ++I) {
-        for (J = 0; J < plmLayerNMinus1; ++J) {
+    for (I = 0; I < plmLayerN1; ++I) {
+        for (J = 0; J < plmLayerN1; ++J) {
             for (K = 0; K < len_z -1; ++K) {
                 _EYZ(pmlXY,I,J,K,1,pmlBHZ);
                 _EXZ(pmlXY,I,J,K,1,pmlBHZ);
@@ -590,8 +590,8 @@ void FDTD::PML_UpdateEXY() {
 
     // Hyx
     //std::cout << "Hzx\n";  
-    for (I = 0; I < plmLayerNMinus2; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
+    for (I = 0; I < plmLayerN2; ++I) {
+        for (J = 0; J < plmLayerN2; ++J) {
             for (K = 0; K < len_y; ++K) {
                 _EZX(pmlXY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
                 _EYX(pmlXY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -600,8 +600,8 @@ void FDTD::PML_UpdateEXY() {
         }
     }
 
-    I = plmLayerNMinus1;
-    J = plmLayerNMinus1;
+    I = plmLayerN1;
+    J = plmLayerN1;
     for (K = 0; K < len_z; ++K) {
         _0EZX(pmlXY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
         _0EYX(pmlXY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -609,8 +609,8 @@ void FDTD::PML_UpdateEXY() {
 
     // Hzy
     // Hxy
-    for (I = 0; I < plmLayerNMinus2; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
+    for (I = 0; I < plmLayerN2; ++I) {
+        for (J = 0; J < plmLayerN2; ++J) {
             for (K = 0; K < len_z; ++K) {
                 _EZY(pmlXY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
                 _EXY(pmlXY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -619,8 +619,8 @@ void FDTD::PML_UpdateEXY() {
         }
     }
 
-    I = plmLayerNMinus1;
-    J = plmLayerNMinus1;
+    I = plmLayerN1;
+    J = plmLayerN1;
     for (K = 0; K < len_z; ++K) {
         _0EZY(pmlXY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
         _0EXY(pmlXY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -633,8 +633,8 @@ void FDTD::PML_UpdateEZY() {
     // Hyx
     //std::cout << "Hzx\n";  
     for (I = 0; I <len_x-1; ++I) {
-        for (J = 0; J < plmLayerNMinus1; ++J) {
-            for (K = 0; K < plmLayerNMinus1; ++K) {
+        for (J = 0; J < plmLayerN1; ++J) {
+            for (K = 0; K < plmLayerN1; ++K) {
                 _EYX(pmlZY,I,J,K,1,pmlBHX);
                 _EZX(pmlZY,I,J,K,1,pmlBHX);
             }
@@ -644,16 +644,16 @@ void FDTD::PML_UpdateEZY() {
     // Hyz
     //std::cout << "Hxz\n";  
     for (I = 0; I < len_x; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+        for (J = 0; J < plmLayerN2; ++J) {
+            for (K = 0; K < plmLayerN2; ++K) {
                 _EYZ(pmlZY,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
                 _EXZ(pmlZY,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
             }
         }
     }
 
-    J = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    J = plmLayerN1;
+    K = plmLayerN1;
     for (I = 0; I < len_x; ++I) {
         _0EYZ(pmlZY,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
         _0EXZ(pmlZY,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -662,15 +662,15 @@ void FDTD::PML_UpdateEZY() {
     // Hzy
     // Hxy
     for (I = 0; I < len_x; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+        for (J = 0; J < plmLayerN2; ++J) {
+            for (K = 0; K < plmLayerN2; ++K) {
                 _EZY(pmlZY,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
                 _EXY(pmlZY,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
             }
         }
     }
-    J = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    J = plmLayerN1;
+    K = plmLayerN1;
     for (I = 0; I < len_x; ++I) {
         _0EZY(pmlZY,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
         _0EXY(pmlZY,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -682,8 +682,8 @@ void FDTD::PML_UpdateEZYN() {
     // Hyx
     //std::cout << "Hzx\n";  
     for (I = 0; I <len_x-1; ++I) {
-        for (J = 0; J < plmLayerNMinus1; ++J) {
-            for (K = 0; K < plmLayerNMinus1; ++K) {
+        for (J = 0; J < plmLayerN1; ++J) {
+            for (K = 0; K < plmLayerN1; ++K) {
                 _EYX(pmlZYN,I,J,K,1,pmlBHX);
                 _EZX(pmlZYN,I,J,K,1,pmlBHX);
             }
@@ -693,16 +693,16 @@ void FDTD::PML_UpdateEZYN() {
     // Hyz
     //std::cout << "Hxz\n";  
     for (I = 0; I < len_x; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+        for (J = 0; J < plmLayerN2; ++J) {
+            for (K = 0; K < plmLayerN2; ++K) {
                 _EYZ(pmlZYN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
                 _EXZ(pmlZYN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
             }
         }
     }
 
-    J = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    J = plmLayerN1;
+    K = plmLayerN1;
     for (I = 0; I < len_x; ++I) {
         _0EYZ(pmlZYN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
         _0EXZ(pmlZYN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -711,15 +711,15 @@ void FDTD::PML_UpdateEZYN() {
     // Hzy
     // Hxy
     for (I = 0; I < len_x; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+        for (J = 0; J < plmLayerN2; ++J) {
+            for (K = 0; K < plmLayerN2; ++K) {
                 _EZY(pmlZYN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
                 _EXY(pmlZYN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
             }
         }
     }
-    J = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    J = plmLayerN1;
+    K = plmLayerN1;
     for (I = 0; I < len_x; ++I) {
         _0EZY(pmlZYN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
         _0EXY(pmlZYN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -731,8 +731,8 @@ void FDTD::PML_UpdateEZNY() {
     // Hyx
     //std::cout << "Hzx\n";  
     for (I = 0; I <len_x-1; ++I) {
-        for (J = 0; J < plmLayerNMinus1; ++J) {
-            for (K = 0; K < plmLayerNMinus1; ++K) {
+        for (J = 0; J < plmLayerN1; ++J) {
+            for (K = 0; K < plmLayerN1; ++K) {
                 _EYX(pmlZNY,I,J,K,1,pmlBHX);
                 _EZX(pmlZNY,I,J,K,1,pmlBHX);
             }
@@ -742,16 +742,16 @@ void FDTD::PML_UpdateEZNY() {
     // Hyz
     //std::cout << "Hxz\n";  
     for (I = 0; I < len_x; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+        for (J = 0; J < plmLayerN2; ++J) {
+            for (K = 0; K < plmLayerN2; ++K) {
                 _EYZ(pmlZNY,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
                 _EXZ(pmlZNY,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
             }
         }
     }
 
-    J = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    J = plmLayerN1;
+    K = plmLayerN1;
     for (I = 0; I < len_x; ++I) {
         _0EYZ(pmlZNY,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
         _0EXZ(pmlZNY,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -760,15 +760,15 @@ void FDTD::PML_UpdateEZNY() {
     // Hzy
     // Hxy
     for (I = 0; I < len_x; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+        for (J = 0; J < plmLayerN2; ++J) {
+            for (K = 0; K < plmLayerN2; ++K) {
                 _EZY(pmlZNY,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
                 _EXY(pmlZNY,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
             }
         }
     }
-    J = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    J = plmLayerN1;
+    K = plmLayerN1;
     for (I = 0; I < len_x; ++I) {
         _0EZY(pmlZNY,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
         _0EXY(pmlZNY,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -780,8 +780,8 @@ size_t I, J, K;
     // Hyx
     //std::cout << "Hzx\n";  
     for (I = 0; I <len_x-1; ++I) {
-        for (J = 0; J < plmLayerNMinus1; ++J) {
-            for (K = 0; K < plmLayerNMinus1; ++K) {
+        for (J = 0; J < plmLayerN1; ++J) {
+            for (K = 0; K < plmLayerN1; ++K) {
                 _EYX(pmlZNYN,I,J,K,1,pmlBHX);
                 _EZX(pmlZNYN,I,J,K,1,pmlBHX);
             }
@@ -791,16 +791,16 @@ size_t I, J, K;
     // Hyz
     //std::cout << "Hxz\n";  
     for (I = 0; I < len_x; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+        for (J = 0; J < plmLayerN2; ++J) {
+            for (K = 0; K < plmLayerN2; ++K) {
                 _EYZ(pmlZNYN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
                 _EXZ(pmlZNYN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
             }
         }
     }
 
-    J = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    J = plmLayerN1;
+    K = plmLayerN1;
     for (I = 0; I < len_x; ++I) {
         _0EYZ(pmlZNYN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
         _0EXZ(pmlZNYN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -809,15 +809,15 @@ size_t I, J, K;
     // Hzy
     // Hxy
     for (I = 0; I < len_x; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+        for (J = 0; J < plmLayerN2; ++J) {
+            for (K = 0; K < plmLayerN2; ++K) {
                 _EZY(pmlZNYN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
                 _EXY(pmlZNYN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
             }
         }
     }
-    J = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    J = plmLayerN1;
+    K = plmLayerN1;
     for (I = 0; I < len_x; ++I) {
         _0EZY(pmlZNYN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
         _0EXY(pmlZNYN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -829,17 +829,17 @@ void FDTD::PML_UpdateEZNXN() {
 
     // Hyx
     //std::cout << "Hzx\n";  
-    for (I = 0; I <plmLayerNMinus2; ++I) {
+    for (I = 0; I <plmLayerN2; ++I) {
         for (J = 0; J < len_y; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+            for (K = 0; K < plmLayerN2; ++K) {
                 _EYX(pmlZNXN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
                 _EZX(pmlZNXN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
             }
         }
     }
 
-    I = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    I = plmLayerN1;
+    K = plmLayerN1;
     for (J = 0; J < len_y; ++J) {
         _0EYX(pmlZNXN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
         _0EZX(pmlZNXN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -847,17 +847,17 @@ void FDTD::PML_UpdateEZNXN() {
 
     // Hyz
     //std::cout << "Hxz\n";  
-    for (I = 0; I < plmLayerNMinus2; ++I) {
+    for (I = 0; I < plmLayerN2; ++I) {
         for (J = 0; J < len_y; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+            for (K = 0; K < plmLayerN2; ++K) {
                 _EYZ(pmlZNXN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
                 _EXZ(pmlZNXN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
             }
         }
     }
 
-    I = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    I = plmLayerN1;
+    K = plmLayerN1;
     for (J = 0; J < len_y; ++J) {
         _0EYZ(pmlZNXN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
         _0EXZ(pmlZNXN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -866,9 +866,9 @@ void FDTD::PML_UpdateEZNXN() {
 
     // Hzy
     // Hxy
-    for (I = 0; I < plmLayerNMinus1; ++I) {
+    for (I = 0; I < plmLayerN1; ++I) {
         for (J = 0; J < len_y-1; ++J) {
-            for (K = 0; K < plmLayerNMinus1; ++K) {
+            for (K = 0; K < plmLayerN1; ++K) {
                 _EZY(pmlZNXN,I,J,K,1,pmlBHY);
                 _EXY(pmlZNXN,I,J,K,1,pmlBHY);
             }
@@ -880,17 +880,17 @@ void FDTD::PML_UpdateEZNX() {
 
     // Hyx
     //std::cout << "Hzx\n";  
-    for (I = 0; I <plmLayerNMinus2; ++I) {
+    for (I = 0; I <plmLayerN2; ++I) {
         for (J = 0; J < len_y; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+            for (K = 0; K < plmLayerN2; ++K) {
                 _EYX(pmlZNX,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
                 _EZX(pmlZNX,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
             }
         }
     }
 
-    I = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    I = plmLayerN1;
+    K = plmLayerN1;
     for (J = 0; J < len_y; ++J) {
         _0EYX(pmlZNX,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
         _0EZX(pmlZNX,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -898,17 +898,17 @@ void FDTD::PML_UpdateEZNX() {
 
     // Hyz
     //std::cout << "Hxz\n";  
-    for (I = 0; I < plmLayerNMinus2; ++I) {
+    for (I = 0; I < plmLayerN2; ++I) {
         for (J = 0; J < len_y; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+            for (K = 0; K < plmLayerN2; ++K) {
                 _EYZ(pmlZNX,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
                 _EXZ(pmlZNX,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
             }
         }
     }
 
-    I = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    I = plmLayerN1;
+    K = plmLayerN1;
     for (J = 0; J < len_y; ++J) {
         _0EYZ(pmlZNX,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
         _0EXZ(pmlZNX,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -917,9 +917,9 @@ void FDTD::PML_UpdateEZNX() {
 
     // Hzy
     // Hxy
-    for (I = 0; I < plmLayerNMinus1; ++I) {
+    for (I = 0; I < plmLayerN1; ++I) {
         for (J = 0; J < len_y-1; ++J) {
-            for (K = 0; K < plmLayerNMinus1; ++K) {
+            for (K = 0; K < plmLayerN1; ++K) {
                 _EZY(pmlZNX,I,J,K,1,pmlBHY);
                 _EXY(pmlZNX,I,J,K,1,pmlBHY);
             }
@@ -931,17 +931,17 @@ void FDTD::PML_UpdateEZXN() {
 
     // Hyx
     //std::cout << "Hzx\n";  
-    for (I = 0; I <plmLayerNMinus2; ++I) {
+    for (I = 0; I <plmLayerN2; ++I) {
         for (J = 0; J < len_y; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+            for (K = 0; K < plmLayerN2; ++K) {
                 _EYX(pmlZXN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
                 _EZX(pmlZXN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
             }
         }
     }
 
-    I = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    I = plmLayerN1;
+    K = plmLayerN1;
     for (J = 0; J < len_y; ++J) {
         _0EYX(pmlZXN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
         _0EZX(pmlZXN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -949,17 +949,17 @@ void FDTD::PML_UpdateEZXN() {
 
     // Hyz
     //std::cout << "Hxz\n";  
-    for (I = 0; I < plmLayerNMinus2; ++I) {
+    for (I = 0; I < plmLayerN2; ++I) {
         for (J = 0; J < len_y; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+            for (K = 0; K < plmLayerN2; ++K) {
                 _EYZ(pmlZXN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
                 _EXZ(pmlZXN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
             }
         }
     }
 
-    I = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    I = plmLayerN1;
+    K = plmLayerN1;
     for (J = 0; J < len_y; ++J) {
         _0EYZ(pmlZXN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
         _0EXZ(pmlZXN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -968,9 +968,9 @@ void FDTD::PML_UpdateEZXN() {
 
     // Hzy
     // Hxy
-    for (I = 0; I < plmLayerNMinus1; ++I) {
+    for (I = 0; I < plmLayerN1; ++I) {
         for (J = 0; J < len_y-1; ++J) {
-            for (K = 0; K < plmLayerNMinus1; ++K) {
+            for (K = 0; K < plmLayerN1; ++K) {
                 _EZY(pmlZXN,I,J,K,1,pmlBHY);
                 _EXY(pmlZXN,I,J,K,1,pmlBHY);
             }
@@ -982,17 +982,17 @@ void FDTD::PML_UpdateEZX() {
 
     // Hyx
     //std::cout << "Hzx\n";  
-    for (I = 0; I <plmLayerNMinus2; ++I) {
+    for (I = 0; I <plmLayerN2; ++I) {
         for (J = 0; J < len_y; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+            for (K = 0; K < plmLayerN2; ++K) {
                 _EYX(pmlZX,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
                 _EZX(pmlZX,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
             }
         }
     }
 
-    I = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    I = plmLayerN1;
+    K = plmLayerN1;
     for (J = 0; J < len_y; ++J) {
         _0EYX(pmlZX,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
         _0EZX(pmlZX,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -1000,17 +1000,17 @@ void FDTD::PML_UpdateEZX() {
 
     // Hyz
     //std::cout << "Hxz\n";  
-    for (I = 0; I < plmLayerNMinus2; ++I) {
+    for (I = 0; I < plmLayerN2; ++I) {
         for (J = 0; J < len_y; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+            for (K = 0; K < plmLayerN2; ++K) {
                 _EYZ(pmlZX,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
                 _EXZ(pmlZX,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
             }
         }
     }
 
-    I = plmLayerNMinus1;
-    K = plmLayerNMinus1;
+    I = plmLayerN1;
+    K = plmLayerN1;
     for (J = 0; J < len_y; ++J) {
         _0EYZ(pmlZX,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
         _0EXZ(pmlZX,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -1019,9 +1019,9 @@ void FDTD::PML_UpdateEZX() {
 
     // Hzy
     // Hxy
-    for (I = 0; I < plmLayerNMinus1; ++I) {
+    for (I = 0; I < plmLayerN1; ++I) {
         for (J = 0; J < len_y-1; ++J) {
-            for (K = 0; K < plmLayerNMinus1; ++K) {
+            for (K = 0; K < plmLayerN1; ++K) {
                 _EZY(pmlZX,I,J,K,1,pmlBHY);
                 _EXY(pmlZX,I,J,K,1,pmlBHY);
             }
@@ -1036,7 +1036,7 @@ void FDTD::PML_UpdateEZ() {
     //std::cout << "Hzx\n";  
     for (I = 0; I <len_x-1; ++I) {
         for (J = 0; J < len_y; ++J) {
-            for (K = 0; K < plmLayerNMinus1; ++K) {
+            for (K = 0; K < plmLayerN1; ++K) {
                 _EYX(pmlZ,I,J,K,1,pmlBHX);
                 _EZX(pmlZ,I,J,K,1,pmlBHX);
             }
@@ -1047,14 +1047,14 @@ void FDTD::PML_UpdateEZ() {
     //std::cout << "Hxz\n";  
     for (I = 0; I < len_x; ++I) {
         for (J = 0; J < len_y; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+            for (K = 0; K < plmLayerN2; ++K) {
                 _EYZ(pmlZ,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
                 _EXZ(pmlZ,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
             }
         }
     }
 
-    K = plmLayerNMinus1;
+    K = plmLayerN1;
     for (I = 0; I < len_x; ++I) {
         for (J = 0; J < len_y; ++J) {
             _0EYZ(pmlZ,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -1066,7 +1066,7 @@ void FDTD::PML_UpdateEZ() {
     // Hxy
     for (I = 0; I < len_x; ++I) {
         for (J = 0; J < len_y-1; ++J) {
-            for (K = 0; K < plmLayerNMinus1; ++K) {
+            for (K = 0; K < plmLayerN1; ++K) {
                 _EZY(pmlZ,I,J,K,1,pmlBHY);
                 _EXY(pmlZ,I,J,K,1,pmlBHY);
             }
@@ -1081,7 +1081,7 @@ size_t I, J, K;
     
     for (I = 0; I < len_x-1; ++I) {
         for (J = 0; J < len_y; ++J) {
-            for (K = 0; K < plmLayerNMinus1; ++K) {
+            for (K = 0; K < plmLayerN1; ++K) {
                 _EYX(pmlZN,I,J,K,1,pmlBHX);
                 _EZX(pmlZN,I,J,K,1,pmlBHX);
             }
@@ -1092,14 +1092,14 @@ size_t I, J, K;
     //std::cout << "Hxz\n";  
     for (I = 0; I < len_x; ++I) {
         for (J = 0; J < len_y; ++J) {
-            for (K = 0; K < plmLayerNMinus2; ++K) {
+            for (K = 0; K < plmLayerN2; ++K) {
                 _EYZ(pmlZN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
                 _EXZ(pmlZN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
             }
         }
     }
 
-    K = plmLayerNMinus1;
+    K = plmLayerN1;
     for (I = 0; I < len_x; ++I) {
         for (J = 0; J < len_y; ++J) {
             _0EYZ(pmlZN,I,J,K,pmlSigmaStarE[K],pmlExpSigmaStarE[K]);
@@ -1111,7 +1111,7 @@ size_t I, J, K;
     // Hxy
     for (I = 0; I < len_x; ++I) {
         for (J = 0; J < len_y-1; ++J) {
-            for (K = 0; K < plmLayerNMinus1; ++K) {
+            for (K = 0; K < plmLayerN1; ++K) {
                 _EZY(pmlZN,I,J,K,1,pmlBHY);
                 _EXY(pmlZN,I,J,K,1,pmlBHY);
             }
@@ -1123,7 +1123,7 @@ void FDTD::PML_UpdateEY() {
     // Hyx
     //std::cout << "Hzx\n";  
     for (I = 0; I <len_x -1; ++I) {
-        for (J = 0; J < plmLayerNMinus1; ++J) {
+        for (J = 0; J < plmLayerN1; ++J) {
             for (K = 0; K < len_z; ++K) {
                 _EYX(pmlY,I,J,K,1,pmlBHX);
                 _EZX(pmlY,I,J,K,1,pmlBHX);
@@ -1134,7 +1134,7 @@ void FDTD::PML_UpdateEY() {
     // Hyz
     //std::cout << "Hxz\n";  
     for (I = 0; I < len_x; ++I) {
-        for (J = 0; J < plmLayerNMinus1; ++J) {
+        for (J = 0; J < plmLayerN1; ++J) {
             for (K = 0; K < len_z -1; ++K) {
                 _EYZ(pmlY,I,J,K,1,pmlBHZ);
                 _EXZ(pmlY,I,J,K,1,pmlBHZ);
@@ -1146,7 +1146,7 @@ void FDTD::PML_UpdateEY() {
     // Hzy
     // Hxy
     for (I = 0; I < len_x; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
+        for (J = 0; J < plmLayerN2; ++J) {
             for (K = 0; K < len_z; ++K) {
                 _EZY(pmlY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
                 _EXY(pmlY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -1154,7 +1154,7 @@ void FDTD::PML_UpdateEY() {
         }
     }
 
-    J = plmLayerNMinus1;
+    J = plmLayerN1;
     for (I = 0; I < len_x; ++I) {
         for (K = 0; K < len_z; ++K) {
             _0EZY(pmlY,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -1169,7 +1169,7 @@ void FDTD::PML_UpdateEYN() {
     //std::cout << "Hzx\n";  
 
     for (I = 0; I <len_x - 1 ;++I) {
-        for (J = 0; J < plmLayerNMinus1; ++J) {
+        for (J = 0; J < plmLayerN1; ++J) {
             for (K = 0; K < len_y; ++K) {
                 _EYX(pmlYN,I,J,K,1,pmlBHX);
                 _EZX(pmlYN,I,J,K,1,pmlBHX);
@@ -1181,7 +1181,7 @@ void FDTD::PML_UpdateEYN() {
     //std::cout << "Hxz\n";  
 
     for (I = 0; I < len_x; ++I) {
-        for (J = 0; J < plmLayerNMinus1; ++J) {
+        for (J = 0; J < plmLayerN1; ++J) {
             for (K = 0; K < len_z -1; ++K) {
                 _EYZ(pmlYN,I,J,K,1,pmlBHZ);
                 _EXZ(pmlYN,I,J,K,1,pmlBHZ);
@@ -1194,7 +1194,7 @@ void FDTD::PML_UpdateEYN() {
     // Hxy
 
     for (I = 0; I < len_x; ++I) {
-        for (J = 0; J < plmLayerNMinus2; ++J) {
+        for (J = 0; J < plmLayerN2; ++J) {
             for (K = 0; K < len_y; ++K) {
                 _EZY(pmlYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
                 _EXY(pmlYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -1202,7 +1202,7 @@ void FDTD::PML_UpdateEYN() {
         }
     }
 
-    J = plmLayerNMinus1;
+    J = plmLayerN1;
     for (I = 0; I < len_x; ++I) {
         for (K = 0; K < len_z; ++K) {
             _0EZY(pmlYN,I,J,K,pmlSigmaStarE[J],pmlExpSigmaStarE[J]);
@@ -1215,7 +1215,7 @@ void FDTD::PML_UpdateEX() {
 
     // Hyz
     //std::cout << "Hxz\n";  
-    for (I = 0; I < plmLayerNMinus1; ++I) {
+    for (I = 0; I < plmLayerN1; ++I) {
         for (J = 0; J < len_y; ++J) {
             for (K = 0; K < len_z -1; ++K) {
                 _EYZ(pmlX,I,J,K,1,pmlBHZ);
@@ -1227,7 +1227,7 @@ void FDTD::PML_UpdateEX() {
 
     // Hyx
     //std::cout << "Hzx\n";  
-    for (I = 0; I < plmLayerNMinus2; ++I) {
+    for (I = 0; I < plmLayerN2; ++I) {
         for (J = 0; J < len_y; ++J) {
             for (K = 0; K < len_y; ++K) {
                 _EZX(pmlX,I,J,K,pmlSigmaStarE[I],pmlExpSigmaStarE[I]);
@@ -1237,7 +1237,7 @@ void FDTD::PML_UpdateEX() {
         }
     }
 
-    I = plmLayerNMinus1;
+    I = plmLayerN1;
     for (J = 0; J < len_y; ++J) {
         for (K = 0; K < len_y; ++K) {
             _0EZX(pmlX,I,J,K,pmlSigmaStarE[I],pmlExpSigmaStarE[I]);
@@ -1247,7 +1247,7 @@ void FDTD::PML_UpdateEX() {
 
     // Hzy
     // Hxy
-    for (I = 0; I < plmLayerNMinus1; ++I) {
+    for (I = 0; I < plmLayerN1; ++I) {
         for (J = 0; J < len_y -1; ++J) {
             for (K = 0; K < len_y; ++K) {
                 _EZY(pmlX,I,J,K,1,pmlBHY);
@@ -1262,7 +1262,7 @@ void FDTD::PML_UpdateEXN() {
 
     // Hyz
     //std::cout << "Hxz\n";  
-    for (I = 0; I < plmLayerNMinus1; ++I) {
+    for (I = 0; I < plmLayerN1; ++I) {
         for (J = 0; J < len_y; ++J) {
             for (K = 0; K < len_z -1; ++K) {
                 _EYZ(pmlXN,I,J,K,1,pmlBHZ);
@@ -1274,7 +1274,7 @@ void FDTD::PML_UpdateEXN() {
 
     // Hyx
     //std::cout << "Hzx\n";  
-    for (I = 0; I < plmLayerNMinus2; ++I) {
+    for (I = 0; I < plmLayerN2; ++I) {
         for (J = 0; J < len_y; ++J) {
             for (K = 0; K < len_y; ++K) {
                 _EZX(pmlXN,I,J,K,pmlSigmaStarE[I],pmlExpSigmaStarE[I]);
@@ -1284,7 +1284,7 @@ void FDTD::PML_UpdateEXN() {
         }
     }
 
-    I = plmLayerNMinus1;
+    I = plmLayerN1;
     for (J = 0; J < len_y; ++J) {
         for (K = 0; K < len_y; ++K) {
             _0EZX(pmlXN,I,J,K,pmlSigmaStarE[I],pmlExpSigmaStarE[I]);
@@ -1294,7 +1294,7 @@ void FDTD::PML_UpdateEXN() {
 
     // Hzy
     // Hxy
-    for (I = 0; I < plmLayerNMinus1; ++I) {
+    for (I = 0; I < plmLayerN1; ++I) {
         for (J = 0; J < len_y -1; ++J) {
             for (K = 0; K < len_y; ++K) {
                 _EZY(pmlXN,I,J,K,1,pmlBHY);

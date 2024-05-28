@@ -10,6 +10,8 @@
 // #define MUR
 #define PML
 
+#define FLEX
+
 #define VECTOR std::vector<float>
 #define VECTOR_2D std::vector<VECTOR>
 #define VECTOR_3D std::vector<VECTOR_2D>
@@ -24,7 +26,7 @@ const float c = 2.997925010e8;   //Скорость света (м/с)
 const float eps0 = 8.854e-12;    //Вакуумная диэлектрическая проницаемость (Ф/м)
 const float mu0 = 4 * M_PI * 1.0e-7; // Вакуумная магнитная проницаемость (Гн/м)
 const float dt = 1.0e-12;            // Временной шаг (с)
-const float dstep = 0.3e-2;
+const float dstep = 0.2e-2;
 const float dx = dstep; // Пространственный шаг по x (м)
 const float dy = dstep; // Пространственный шаг по y (м)
 const float dz = dstep; // Пространственный шаг по z (м)
@@ -34,6 +36,29 @@ const float sigma = 0;  // Коэффициент проводимости дл�
 const float Mur_Tx = c * dt / dx;
 const float Mur_Ty = c * dt / dy;
 const float Mur_Tz = c * dt / dz;
+
+            // printf("[%d][%d][%d]\n",x,y,z);
+#define setBase(x,y,z) ({\
+            Sigm._X[x][y][z]= 0;\
+            Sigm._Y[x][y][z]= 0;\
+            Sigm._Z[x][y][z]= 0;\
+            Mu._X[x][y][z]= 22000;\
+            Mu._Y[x][y][z]= 22000;\
+            Mu._Z[x][y][z]= 22000;\
+            Eps._X[x][y][z]= 4;\
+            Eps._Y[x][y][z]= 4;\
+            Eps._Z[x][y][z]= 4;})
+
+#define setPlot(x,y,z) ({\
+            Sigm._X[x][y][z]= 1000000;\
+            Sigm._Y[x][y][z]= 1000000;\
+            Sigm._Z[x][y][z]= 1000000;\
+            Mu._X[x][y][z]= 1;\
+            Mu._Y[x][y][z]= 1;\
+            Mu._Z[x][y][z]= 1;\
+            Eps._X[x][y][z]= 1;\
+            Eps._Y[x][y][z]= 1;\
+            Eps._Z[x][y][z]= 1;})
 
 struct PMLData {
     float Hyx, Hyz, Hzx, Hzy, Hxy, Hxz;
@@ -68,9 +93,7 @@ public:
 
     void saveExToFileXY(const std::string &filename);
     void saveExToFileXZ(const std::string &filename);
-
-    void saveGraphZX(const std::string &filename);
-    void saveRangeY();
+    void saveExToFileXX(const std::string &filename);
 
     void copyNodes();
     Field() {}
@@ -111,17 +134,17 @@ private:
     int len_x = 0;
     int len_y = 0;
     int len_z = 0;
-        #ifdef PML
-            #ifdef MUR
-                #error
-            #else
-        //for pml
+#ifdef PML
+    #ifdef MUR
+        #error
+    #else
+//for pml
     float pmlBHX = 1;
     float pmlBHZ = 1;
     float pmlBHY = 1;
     int plmLayerN = 15;
-    size_t plmLayerNMinus1 = plmLayerN - 1;
-    size_t plmLayerNMinus2 = plmLayerN - 2;
+    size_t plmLayerN1 = plmLayerN - 1;
+    size_t plmLayerN2 = plmLayerN - 2;
     std::vector<float> pmlSigmaStarH;
     std::vector<float> pmlSigmaStarE;
     std::vector<float> pmlExpSigmaStarH; 
@@ -160,8 +183,8 @@ private:
     V_PML_3D pmlXYNZN;
     V_PML_3D pmlXNYNZ;
     V_PML_3D pmlXNYNZN;
-                #endif    
-        #endif
+    #endif    
+#endif
 
 public:
 
@@ -179,12 +202,14 @@ public:
         E = Field(mesh);
         H = Field(mesh);
         J = Field(mesh);
-        Sigm = Field(mesh, 2.0e-5); // 2 -14
+        Sigm = Field(mesh, 1); // 2 -14
         Eps = Field(mesh, 1.00057);  // 1.00057
         Mu = Field(mesh, 0.999991);  // 0.999991
         len_x = mesh.len_x;
         len_y = mesh.len_y;
         len_z = mesh.len_z;
+        int px1 = len_x / 2;
+        int py1 = len_y / 2;
         AH = VECTOR_3D(len_x, VECTOR_2D(len_y, VECTOR(len_z)));
         AE = VECTOR_3D(len_x, VECTOR_2D(len_y, VECTOR(len_z)));
         BE = VECTOR_3D(len_x, VECTOR_2D(len_y, VECTOR(len_z)));
@@ -192,10 +217,28 @@ public:
         
 
         std::cout << "SIZE FIELD: \n" << "len_x = " << len_x << "\n"<<"len_y = " << len_y << "\n" <<"len_z = " << len_z << "\n";
+        printf("Base:\n[%d][%d][%d]---[%d][%d][%d]\n[%d][%d][%d]---[%d][%d][%d]\n", px1-33,py1-33,39,px1-33,py1-33+66,39,px1-33+66,py1-33,39,px1-33+66,py1-33+66,39);
 
-        
-        initCoeffi();
+         for(int a = 0; a < 132; a++){
+            for(int b = 0; b < 132; b++){
+                setBase(px1-66+a,py1-66+b,49);
+                setBase(px1-66+a,py1-66+b,48);
+                setBase(px1-66+a,py1-66+b,47);
+                setBase(px1-66+a,py1-66+b,46);
+                setBase(px1-66+a,py1-66+b,45);
+                setBase(px1-66+a,py1-66+b,44);
+            }
+        }
+
+        for(int a = 0; a < 18; a++){
+            for(int b = 0; b < 18; b++){
+                setPlot(px1-9+a,py1-9+b,50);
+                setPlot(px1-9+a,py1-9+b,51);
+
+            }
+        }
         std::cout << "INIT\n";
+        initCoeffi();
         #ifdef PML
             #ifdef MUR
                 #error
@@ -235,7 +278,10 @@ public:
                 pmlXYNZN  =  V_PML_3D(plmLayerN,V_PML_2D(plmLayerN, V_PML(plmLayerN)));
                 pmlXNYNZ  =  V_PML_3D(plmLayerN,V_PML_2D(plmLayerN, V_PML(plmLayerN)));
                 pmlXNYNZN  =  V_PML_3D(plmLayerN,V_PML_2D(plmLayerN, V_PML(plmLayerN)));
+                std::cout << "INIT1\n";
                 InitPML();
+                std::cout << "INIT2\n";
+
             #endif    
         #endif
     }
