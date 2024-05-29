@@ -1,61 +1,80 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
-pathExy = '/home/alex/src/diplom_FDTD/results/mur_Exy.txt'
-pathExz = '/home/alex/src/diplom_FDTD/results/mur_Exz.txt'
+pathExy = '/home/alex/my_diplom/mur_Exy.txt'
+pathExz = '/home/alex/my_diplom/mur_Exz.txt'
+pathEyz = '/home/alex/my_diplom/mur_Eyz.txt'
+pathEyx = '/home/alex/my_diplom/mur_Eyx.txt'
+
+MPA = pd.read_csv('/home/alex/my_diplom/MPA - DirTotal.csv')
+dp1 = np.asarray(MPA[['dB(DirTotal) [] - Freq=\'2.442GHz\' Phi=\'0deg\'']])
+dp2 = np.asarray(MPA[['dB(DirTotal) [] - Freq=\'2.442GHz\' Phi=\'90.0000000000002deg\'']])
 
 
-a = 79
-b = 51
-r1 = 75
+
+a = 51
+b = 124
+r1 = 0
 r2 = 77
 r = range(r1,r2)
 Exy = np.loadtxt(pathExy)
 Exz = np.loadtxt(pathExz)
-data_collected = Exy+ Exz
-stepSize = 0.01
+Eyz = np.loadtxt(pathEyz)
+Eyx = np.loadtxt(pathEyx)
+# антенна1 Exz + Exy
+data_collected = Exz + Exy
+# data_collected = Eyz + Eyx
+
+stepSize = 1
+print(len(Exz))
 
 #Generated vertices
 positions = []
-array_dna = []
 
 # for r in range(15, 45):
+deg_start = 270
+deg_end = 360
+theta = np.arange(deg_start, deg_end, stepSize)
+array_dna = np.zeros(len(theta))
 
-t = 0
+def point_pos(x0, y0, d, _theta):
+    _theta_rad = np.radians(_theta)
+    return x0 + d*np.cos(_theta_rad), y0 + d*np.sin(_theta_rad)
+
+
+
+t = deg_start
 i = 0
-while t <  np.pi*2:
-    positions.append(np.array([r * np.cos(t) + a, r * np.sin(t) + b]).astype(np.int64).T)
-    i+=1
+while t <  deg_end:
+    positions.append(np.array(point_pos(a,b,r,t)).astype(np.int64).T)
     t += stepSize
     # array_dna.append(data_collected[positions[-1][0]][positions[-1][1]])
     summ = 0
     for vect in positions[-1]:
         summ += data_collected[vect[0]][vect[1]]
-    array_dna.append(summ/(r2-r1))
-
-# plt.plot(range(len(array_dna)),array_dna)  
-# naming the x axis  
-
-theta = np.arange(0, np.pi*2, 0.01)
-
-fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
+    array_dna[i] = (summ/(r2-r1))
+    i+=1
 
 
-ax.plot(theta, array_dna)
-# ax.set_rticks([0.5, 1, 1.5, 2])  # Less radial ticks
-# ax.set_rlabel_position(-22.5)  # Move radial labels away from plotted line
-ax.grid(True)
+ 
 
-ax.set_title("A line plot on a polar axis", va='bottom')
+# theta = np.arange(deg_start, deg_end, 0.01)
+fig, ax = plt.subplots()
+# ax.plot(theta, array_dna)
+# ax.grid(True)
+# ax.set_title("A line plot on a polar axis", va='bottom')
+def f_norm(x_):
+    return (x_ - min(x_)) / (max(x_) - min(x_))
+ax.plot(range(len(dp1)),f_norm(dp1),label=r"Эталонные данные",linestyle=":",linewidth=2)
+ax.plot(range(len(array_dna)),f_norm(10*np.log10(array_dna)),label=r"Результаты измерения",linewidth=2)
+ax.grid()
+ax.set_xticks([0,10,20,30,40,50,60,70,80,90])
+ax.set_xticklabels(["0", "10", "20", "30", "40", "50", "60", "70", "80", "90"])
+ax.set(xlabel="Градусы", ylabel="!!!!!!!!!!")
+ax.legend()
 plt.show()
-# plt.xlabel('x - axis')  
-# # naming the y axis  
-# plt.ylabel('y - axis')  
-    
-# # giving a title to my graph  
-# plt.title('DNA r = %d'%r)  
-    
-# function to show the plot  
+
   
 
 # plt.imshow((np.abs(data_collected)))
